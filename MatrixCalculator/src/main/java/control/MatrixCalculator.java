@@ -10,6 +10,79 @@ public class MatrixCalculator {
 	private ArrayList<Matrix> listOfMatrix = new ArrayList<Matrix>();
 	private List<String> keySet = new ArrayList<String>();
 
+	public Matrix addMatrices(Matrix firstMatrix, Matrix secondMatrix) {
+		if (areSameDimensions(firstMatrix, secondMatrix)) {
+			
+			int[][] newData = new int[firstMatrix.getRow()][firstMatrix.getColumn()];
+			Matrix addedMatrix = new Matrix("" + firstMatrix.getName() + "+" + secondMatrix.getName(),
+					firstMatrix.getRow(), firstMatrix.getColumn());
+			for (int row = 0; row < firstMatrix.getCurrentMatrix().length; row++) {
+				for (int col = 0; col < firstMatrix.getCurrentMatrix()[row].length; col++) {
+					int add = firstMatrix.getCurrentMatrix()[row][col] + secondMatrix.getCurrentMatrix()[row][col];
+					newData[row][col] = add;
+				}
+			}
+
+			addedMatrix.setCurrentMatrix(newData);
+			return addedMatrix;
+		} else {
+			System.out.println("Dimensions are not same...");
+		}
+		return null;
+	}
+
+	public Matrix subtractMatrices(Matrix firstMatrix, Matrix secondMatrix) {
+		if (areSameDimensions(firstMatrix, secondMatrix)) {
+			
+			int[][] newData = new int[firstMatrix.getRow()][firstMatrix.getColumn()];
+			Matrix subMatrix = new Matrix("" + firstMatrix.getName() + "-" + secondMatrix.getName(),
+					firstMatrix.getRow(), firstMatrix.getColumn());
+			for (int row = 0; row < firstMatrix.getCurrentMatrix().length; row++) {
+				for (int col = 0; col < firstMatrix.getCurrentMatrix()[row].length; col++) {
+					int sub = firstMatrix.getCurrentMatrix()[row][col] - secondMatrix.getCurrentMatrix()[row][col];
+					newData[row][col] = sub;
+				}
+			}
+
+			subMatrix.setCurrentMatrix(newData);
+			return subMatrix;
+		} else {
+			System.out.println("Dimensions are not same...");
+		}
+		return null;
+	}
+
+	public void multipyMatrices(Matrix firstMatrix, Matrix secondMatrix) {
+
+	}
+
+	public boolean areSameMatrices(Matrix firstMatrix, Matrix secondMatrix) {
+		for (int row = 0; row < firstMatrix.getCurrentMatrix().length; row++) {
+			for (int col = 0; col < firstMatrix.getCurrentMatrix()[row].length; col++) {
+				if (firstMatrix.getCurrentMatrix()[row][col] == secondMatrix.getCurrentMatrix()[row][col]) {
+
+				} else {
+					return false;
+				}
+			}
+		}
+		return true;
+	}
+
+	public boolean areSameDimensions(Matrix firstMatrix, Matrix secondMatrix) {
+		int row1 = firstMatrix.getRow();
+		int column1 = firstMatrix.getColumn();
+
+		int row2 = secondMatrix.getRow();
+		int column2 = secondMatrix.getColumn();
+
+		if (row1 == row2 && column1 == column2) {
+			return true;
+		}
+
+		return false;
+	}
+
 	public void addMatrix(Matrix matrix) {
 		if (!keySet.contains(matrix.getName())) {
 			keySet.add(matrix.getName());
