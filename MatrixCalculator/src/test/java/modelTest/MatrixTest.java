@@ -154,7 +154,6 @@ public class MatrixTest {
 
 		Matrix resultMatrix = cal.subtractMatrices(a, b);
 
-	
 		if (cal.areSameMatrices(expected, resultMatrix)) {
 			assertTrue(true);
 		} else {
@@ -216,53 +215,57 @@ public class MatrixTest {
 			assertTrue(false);
 		}
 	}
+
 	@Test
 	public void testMatrixMultiplication() {
 		MatrixCalculator cal = new MatrixCalculator();
-		Matrix a = new Matrix("A", 2, 4);
-		Matrix b = new Matrix("B", 2, 4);
+		Matrix a = new Matrix("A", 2, 3);
+		Matrix b = new Matrix("B", 3, 4);
 
 		Matrix expected = new Matrix("A*B", 2, 4);
 
-		int[][] a_data = new int[2][4];
-		int[][] b_data = new int[2][4];
+		int[][] a_data = new int[2][3];
+		int[][] b_data = new int[3][4];
 		int[][] expectedData = new int[2][4];
 
 		a_data[0][0] = 2;
 		a_data[0][1] = 4;
-		a_data[0][2] = 8;
-		a_data[0][3] = -3;
+		a_data[0][2] = -1;
 
-		a_data[1][0] = 0;
-		a_data[1][1] = 1;
-		a_data[1][2] = 2;
-		a_data[1][3] = 3;
+		a_data[1][0] = 5;
+		a_data[1][1] = 8;
+		a_data[1][2] = 0;
 
-		b_data[0][0] = -3;
-		b_data[0][1] = 4;
-		b_data[0][2] = 0;
-		b_data[0][3] = 1;
+		b_data[0][0] = 2;
+		b_data[0][1] = 5;
+		b_data[0][2] = 1;
+		b_data[0][3] = 4;
 
-		b_data[1][0] = 6;
+		b_data[1][0] = 4;
 		b_data[1][1] = 8;
-		b_data[1][2] = 2;
-		b_data[1][3] = 0;
+		b_data[1][2] = 0;
+		b_data[1][3] = 6;
 
-		expectedData[0][0] = -5;
-		expectedData[0][1] = 0;
-		expectedData[0][2] = -8;
-		expectedData[0][3] = 4;
+		b_data[2][0] = -3;
+		b_data[2][1] = 1;
+		b_data[2][2] = -2;
+		b_data[2][3] = -1;
 
-		expectedData[1][0] = 6;
-		expectedData[1][1] = 7;
-		expectedData[1][2] = 0;
-		expectedData[1][3] = -3;
+		expectedData[0][0] = 23;
+		expectedData[0][1] = 41;
+		expectedData[0][2] = 4;
+		expectedData[0][3] = 33;
+
+		expectedData[1][0] = 42;
+		expectedData[1][1] = 89;
+		expectedData[1][2] = 5;
+		expectedData[1][3] = 68;
 
 		a.setCurrentMatrix(a_data);
 		b.setCurrentMatrix(b_data);
 		expected.setCurrentMatrix(expectedData);
 
-		Matrix resultMatrix = cal.subtractMatrices(b, a);
+		Matrix resultMatrix = cal.multipyMatrices(a, b);
 
 		if (cal.areSameMatrices(expected, resultMatrix)) {
 			assertTrue(true);
@@ -270,7 +273,6 @@ public class MatrixTest {
 			assertTrue(false);
 		}
 	}
-	
 
 	@Test
 	public void testSameDimensions_true() {
