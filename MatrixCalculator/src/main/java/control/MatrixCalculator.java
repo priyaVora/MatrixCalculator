@@ -57,19 +57,19 @@ public class MatrixCalculator {
 	}
 
 	public Matrix multipyMatrices(Matrix firstMatrix, Matrix secondMatrix) {
-		Queue<Integer> listofValues = new LinkedList<Integer>();
+		int operationCount = 0;
+		List<String> listOfRows = new ArrayList<String>();
 
 		Matrix tempMatrix = getNewMatrixSize(firstMatrix, secondMatrix);
+		Matrix resultMatrix = new Matrix();
+	
 		if (tempMatrix != null) {
 			int row = tempMatrix.getRow();
 			int column = tempMatrix.getColumn();
 
-			Matrix resultMatrix = new Matrix();
 			resultMatrix.setRow(row);
 			resultMatrix.setColumn(column);
-			resultMatrix.setName(firstMatrix.getName() + "*" + secondMatrix);
-
-			int[][] calculatedData = new int[row][column];
+			resultMatrix.setName(firstMatrix.getName() + "*" + secondMatrix.getName());
 
 			int firstRow = 0;
 			int firstColumn = 0;
@@ -77,10 +77,11 @@ public class MatrixCalculator {
 			int secondColumn = 0;
 
 			int positionValue = 0;
-			for (int iterateSecondCol = 1; iterateSecondCol <= secondMatrix.getColumn(); iterateSecondCol++) {
-				for (int k = 0; k < firstMatrix.getRow(); k++) {
-					firstRow = k;
-					System.out.println("K:" + k);
+			String rowValue = "";
+			while (operationCount != row) {
+
+				System.out.println("Count: " + operationCount);
+				for (int iterateSecondCol = 1; iterateSecondCol <= secondMatrix.getColumn(); iterateSecondCol++) {
 					for (int i = 0; i < secondMatrix.getRow(); i++) {
 						System.out.println("\nFIRST");
 						System.out.print(firstRow + ",");
@@ -103,76 +104,92 @@ public class MatrixCalculator {
 						firstColumn++;
 						secondRow++;
 					}
+
 					firstColumn = 0;
 					secondRow = 0;
+
+					rowValue += positionValue + " ";
+
 					System.out.println("\tPosition: " + positionValue);
-					listofValues.add(positionValue);
+
+					if (iterateSecondCol == secondMatrix.getColumn()) {
+						rowValue = rowValue.trim();
+						listOfRows.add(rowValue);
+					}
 					positionValue = 0;
 					System.out.println("---------------------------------------------------");
+
+					secondColumn = iterateSecondCol;
 				}
-				System.out.println("NEW COLUMN FOR SECOND!");
-				secondColumn = iterateSecondCol;
+				operationCount++;
+				rowValue = "";
+				firstRow = operationCount;
+				secondRow = 0;
+				secondColumn = 0;
 			}
 
 		}
-//		multiplicationHelper(firstMatrix, secondMatrix, firstRow, firstColumn, secondRow, secondColumn,
-//				positionValue, listofValues);
+		System.out.println("///////////////////////");
+		formatData(listOfRows);
+		// int counter = 0;
+		int[][] newResult = new int[tempMatrix.getRow()][tempMatrix.getColumn()];
+		// System.out.println(" ");
+		// for (int row = 0; row < 2; row++) {
+		// for (int col = 0; col < 4; col++) {
+		// System.out.print(row);
+		// System.out.print("," + col);
+		// System.out.print(" ");
+		// newResult[row][col] = 0;
+		// counter++;
+		// }
+		// System.out.println(" ");
+		// }
+		//
+		// tempMatrix.setCurrentMatrix(newResult);
+		// tempMatrix.printMatrix();
 
-		sortMatrixValues(listofValues, tempMatrix.getRow(), tempMatrix.getColumn());
-		return null;
-
+		System.out.println("///////////////////////");
+		int currentRow = 0;
+		int currentColumn = 0;
+		List<String[]> formatedList = formatData(listOfRows);
+		for (String[] dataArray : formatedList) {
+			for (String string : dataArray) {
+				System.out.print("DATA: " + string + " ");
+				System.out.println("Current Row: " + currentRow);
+				System.out.println("Current Column: " + currentColumn);
+				newResult[currentRow][currentColumn] = Integer.parseInt(string);
+				currentColumn++;
+			}
+			System.out.println("\n???????????");
+			currentRow++;
+			currentColumn = 0;
+		}
+		resultMatrix.setCurrentMatrix(newResult);
+		resultMatrix.printMatrix();
+		return resultMatrix;
 	}
 
-//	private void multiplicationHelper(Matrix firstMatrix, Matrix secondMatrix, Integer firstRow, Integer firstColumn,
-//			Integer secondRow, Integer secondColumn, Integer positionValue, Queue<Integer> listofValues) {
-//		for (int iterateSecondCol = 1; iterateSecondCol <= secondMatrix.getColumn(); iterateSecondCol++) {
-//			// for (int k = 0; k < firstMatrix.getRow(); k++) {
-//			// firstRow = k;
-//			// System.out.println("K:" + k);
-//			for (int i = 0; i < secondMatrix.getRow(); i++) {
-//				System.out.println("Priya");
-//				System.out.println("\nFIRST");
-//				System.out.print(firstRow + ",");
-//				System.out.print(firstColumn);
-//				System.out.println(" ");
-//				System.out.println(" ");
-//				System.out.println("SECOND");
-//				System.out.print(secondRow + ",");
-//				System.out.print(secondColumn);
-//				System.out.println(" ");
-//
-//				int firstValue = firstMatrix.getCurrentMatrix()[firstRow][firstColumn];
-//				int secondValue = secondMatrix.getCurrentMatrix()[secondRow][secondColumn];
-//
-//				System.out.println("===" + firstValue);
-//				System.out.println("===" + secondValue);
-//
-//				int product = firstValue * secondValue;
-//				positionValue += product;
-//				firstColumn++;
-//				secondRow++;
-//			}
-//			firstColumn = 0;
-//			secondRow = 0;
-//			System.out.println("\tPosition: " + positionValue);
-//			listofValues.add(positionValue);
-//			positionValue = 0;
-//			System.out.println("---------------------------------------------------");
-//			// }
-//			System.out.println("NEW COLUMN FOR SECOND!");
-//			secondColumn = iterateSecondCol;
-//		}
-//
-//	}
-
-	private void sortMatrixValues(Queue<Integer> listofValues, int row, int col) {
-		int count = 0;
-		String rowValues = "";
-		List<String> listOfRows = new ArrayList<String>();
-
-		while (!(listofValues.isEmpty())) {
-			System.out.println();
+	private List<String[]> formatData(List<String> listOfRows) {
+		if (listOfRows == null) {
+			return null;
 		}
+		int count = 0;
+		List<String[]> formatedList = new ArrayList<String[]>();
+
+		for (String eachRow : listOfRows) {
+			count = 0;
+			System.out.println("Row: " + eachRow);
+			String[] eachValue = eachRow.split(" ");
+			String[] data = new String[eachValue.length];
+			for (String value : eachValue) {
+				System.out.println(value);
+				data[count] = value;
+				count++;
+			}
+			formatedList.add(data);
+		}
+
+		return formatedList;
 	}
 
 	public Matrix getNewMatrixSize(Matrix firstMatrix, Matrix secondMatrix) {
@@ -196,6 +213,9 @@ public class MatrixCalculator {
 	}
 
 	public boolean areSameMatrices(Matrix firstMatrix, Matrix secondMatrix) {
+		if (firstMatrix == null || secondMatrix == null) {
+			return false;
+		}
 		for (int row = 0; row < firstMatrix.getCurrentMatrix().length; row++) {
 			for (int col = 0; col < firstMatrix.getCurrentMatrix()[row].length; col++) {
 				if (firstMatrix.getCurrentMatrix()[row][col] == secondMatrix.getCurrentMatrix()[row][col]) {
@@ -328,4 +348,5 @@ public class MatrixCalculator {
 	public List<String> getKeySet() {
 		return keySet;
 	}
+
 }

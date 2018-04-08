@@ -275,6 +275,97 @@ public class MatrixTest {
 	}
 
 	@Test
+	public void testMatrixMultiplication2() {
+		MatrixCalculator cal = new MatrixCalculator();
+		Matrix a = new Matrix("A", 2, 2);
+		Matrix b = new Matrix("B", 2, 2);
+
+		Matrix expected = new Matrix("A*B", 2, 2);
+
+		int[][] a_data = new int[2][2];
+		int[][] b_data = new int[2][2];
+		int[][] expectedData = new int[2][2];
+
+		a_data[0][0] = -4;
+		a_data[0][1] = 6;
+
+		a_data[1][0] = 12;
+		a_data[1][1] = 999;
+
+		b_data[0][0] = 1;
+		b_data[0][1] = 2;
+
+		b_data[1][0] = 3;
+		b_data[1][1] = -4;
+
+		expectedData[0][0] = 14;
+		expectedData[0][1] = -32;
+
+		expectedData[1][0] = 3009;
+		expectedData[1][1] = -3972;
+
+		a.setCurrentMatrix(a_data);
+		b.setCurrentMatrix(b_data);
+		expected.setCurrentMatrix(expectedData);
+
+		Matrix resultMatrix = cal.multipyMatrices(a, b);
+
+		if (cal.areSameMatrices(expected, resultMatrix)) {
+			assertTrue(true);
+		} else {
+			assertTrue(false);
+		}
+	}
+
+	@Test
+	public void testMatrixMultiplication3() {
+		MatrixCalculator cal = new MatrixCalculator();
+		Matrix a = new Matrix("A", 2, 3);
+		Matrix b = new Matrix("B", 3, 2);
+
+		Matrix expected = new Matrix("A*B", 2, 2);
+
+		int[][] a_data = new int[2][3];
+		int[][] b_data = new int[3][2];
+		int[][] expectedData = new int[2][2];
+
+		a_data[0][0] = 2;
+		a_data[0][1] = 1;
+		a_data[0][2] = 3;
+
+		a_data[1][0] = 1;
+		a_data[1][1] = -1;
+		a_data[1][2] = 0;
+
+		b_data[0][0] = 1;
+		b_data[0][1] = 0;
+
+		b_data[1][0] = 2;
+		b_data[1][1] = 1;
+
+		b_data[2][0] = 3;
+		b_data[2][1] = 2;
+
+		expectedData[0][0] = 13;
+		expectedData[0][1] = 7;
+
+		expectedData[1][0] = -1;
+		expectedData[1][1] = -1;
+
+		a.setCurrentMatrix(a_data);
+		b.setCurrentMatrix(b_data);
+		expected.setCurrentMatrix(expectedData);
+
+		Matrix resultMatrix = cal.multipyMatrices(a, b);
+
+		if (cal.areSameMatrices(expected, resultMatrix)) {
+			assertTrue(true);
+		} else {
+			assertTrue(false);
+		}
+	}
+
+	@Test
 	public void testSameDimensions_true() {
 		MatrixCalculator cal = new MatrixCalculator();
 		Matrix a = new Matrix("A", 3, 5);
