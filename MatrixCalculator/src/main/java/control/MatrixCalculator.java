@@ -62,7 +62,7 @@ public class MatrixCalculator {
 
 		Matrix tempMatrix = getNewMatrixSize(firstMatrix, secondMatrix);
 		Matrix resultMatrix = new Matrix();
-	
+
 		if (tempMatrix != null) {
 			int row = tempMatrix.getRow();
 			int column = tempMatrix.getColumn();
@@ -79,25 +79,23 @@ public class MatrixCalculator {
 			int positionValue = 0;
 			String rowValue = "";
 			while (operationCount != row) {
-
-				System.out.println("Count: " + operationCount);
 				for (int iterateSecondCol = 1; iterateSecondCol <= secondMatrix.getColumn(); iterateSecondCol++) {
 					for (int i = 0; i < secondMatrix.getRow(); i++) {
-						System.out.println("\nFIRST");
-						System.out.print(firstRow + ",");
-						System.out.print(firstColumn);
-						System.out.println(" ");
-						System.out.println(" ");
-						System.out.println("SECOND");
-						System.out.print(secondRow + ",");
-						System.out.print(secondColumn);
-						System.out.println(" ");
+						// System.out.println("\nFIRST");
+						// System.out.print(firstRow + ",");
+						// System.out.print(firstColumn);
+						// System.out.println(" ");
+						// System.out.println(" ");
+						// System.out.println("SECOND");
+						// System.out.print(secondRow + ",");
+						// System.out.print(secondColumn);
+						// System.out.println(" ");
 
 						int firstValue = firstMatrix.getCurrentMatrix()[firstRow][firstColumn];
 						int secondValue = secondMatrix.getCurrentMatrix()[secondRow][secondColumn];
 
-						System.out.println("===" + firstValue);
-						System.out.println("===" + secondValue);
+						// System.out.println("===" + firstValue);
+						// System.out.println("===" + secondValue);
 
 						int product = firstValue * secondValue;
 						positionValue += product;
@@ -110,14 +108,14 @@ public class MatrixCalculator {
 
 					rowValue += positionValue + " ";
 
-					System.out.println("\tPosition: " + positionValue);
+					// System.out.println("\tPosition: " + positionValue);
 
 					if (iterateSecondCol == secondMatrix.getColumn()) {
 						rowValue = rowValue.trim();
 						listOfRows.add(rowValue);
 					}
 					positionValue = 0;
-					System.out.println("---------------------------------------------------");
+					// System.out.println("---------------------------------------------------");
 
 					secondColumn = iterateSecondCol;
 				}
@@ -129,38 +127,19 @@ public class MatrixCalculator {
 			}
 
 		}
-		System.out.println("///////////////////////");
-		formatData(listOfRows);
-		// int counter = 0;
-		int[][] newResult = new int[tempMatrix.getRow()][tempMatrix.getColumn()];
-		// System.out.println(" ");
-		// for (int row = 0; row < 2; row++) {
-		// for (int col = 0; col < 4; col++) {
-		// System.out.print(row);
-		// System.out.print("," + col);
-		// System.out.print(" ");
-		// newResult[row][col] = 0;
-		// counter++;
-		// }
-		// System.out.println(" ");
-		// }
-		//
-		// tempMatrix.setCurrentMatrix(newResult);
-		// tempMatrix.printMatrix();
 
-		System.out.println("///////////////////////");
+		formatData(listOfRows);
+
+		int[][] newResult = new int[tempMatrix.getRow()][tempMatrix.getColumn()];
+
 		int currentRow = 0;
 		int currentColumn = 0;
 		List<String[]> formatedList = formatData(listOfRows);
 		for (String[] dataArray : formatedList) {
 			for (String string : dataArray) {
-				System.out.print("DATA: " + string + " ");
-				System.out.println("Current Row: " + currentRow);
-				System.out.println("Current Column: " + currentColumn);
 				newResult[currentRow][currentColumn] = Integer.parseInt(string);
 				currentColumn++;
 			}
-			System.out.println("\n???????????");
 			currentRow++;
 			currentColumn = 0;
 		}
@@ -178,11 +157,10 @@ public class MatrixCalculator {
 
 		for (String eachRow : listOfRows) {
 			count = 0;
-			System.out.println("Row: " + eachRow);
 			String[] eachValue = eachRow.split(" ");
 			String[] data = new String[eachValue.length];
 			for (String value : eachValue) {
-				System.out.println(value);
+				// System.out.println(value);
 				data[count] = value;
 				count++;
 			}
@@ -204,7 +182,7 @@ public class MatrixCalculator {
 			resultMatrix = new Matrix();
 			resultMatrix.setRow(firstMatrixRowCount);
 			resultMatrix.setColumn(secondMatrixColumnCount);
-			System.out.println("Matched!");
+			// System.out.println("Matched!");
 		} else {
 			System.out.println("Did not matched");
 		}

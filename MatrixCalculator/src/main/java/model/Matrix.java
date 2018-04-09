@@ -69,7 +69,7 @@ public class Matrix {
 	}
 
 	public void printMatrix() {
-		System.out.println("Print: [" + name + "] " + row + "X" + column + "\n");
+		System.out.println("\nPrint: [" + name + "] " + row + "X" + column + "\n");
 		for (int row = 0; row < this.currentMatrix.length; row++) {
 			for (int col = 0; col < this.currentMatrix[row].length; col++) {
 				System.out.print(currentMatrix[row][col]);
