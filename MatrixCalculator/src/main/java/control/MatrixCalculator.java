@@ -18,12 +18,12 @@ public class MatrixCalculator {
 	public Matrix addMatrices(Matrix firstMatrix, Matrix secondMatrix) {
 		if (areSameDimensions(firstMatrix, secondMatrix)) {
 
-			int[][] newData = new int[firstMatrix.getRow()][firstMatrix.getColumn()];
+			double[][] newData = new double[firstMatrix.getRow()][firstMatrix.getColumn()];
 			Matrix addedMatrix = new Matrix("" + firstMatrix.getName() + "+" + secondMatrix.getName(),
 					firstMatrix.getRow(), firstMatrix.getColumn());
 			for (int row = 0; row < firstMatrix.getCurrentMatrix().length; row++) {
 				for (int col = 0; col < firstMatrix.getCurrentMatrix()[row].length; col++) {
-					int add = firstMatrix.getCurrentMatrix()[row][col] + secondMatrix.getCurrentMatrix()[row][col];
+					double add = firstMatrix.getCurrentMatrix()[row][col] + secondMatrix.getCurrentMatrix()[row][col];
 					newData[row][col] = add;
 				}
 			}
@@ -36,49 +36,107 @@ public class MatrixCalculator {
 		return null;
 	}
 
-	public static double[][] rref(double[][] matrix) {
-		double[][] rref = new double[matrix.length][];
+	public static double[][] transpose(double[][] matrix) {
+		double[][] transpose = new double[matrix[0].length][matrix.length];
+
 		for (int i = 0; i < matrix.length; i++)
-			rref[i] = Arrays.copyOf(matrix[i], matrix[i].length);
+			for (int j = 0; j < matrix[i].length; j++)
+				transpose[j][i] = matrix[i][j];
+		return transpose;
+	}
 
-		int r = 0;
-		for (int c = 0; c < rref[0].length && r < rref.length; c++) {
-			int j = r;
-			for (int i = r + 1; i < rref.length; i++)
-				if (Math.abs(rref[i][c]) > Math.abs(rref[j][c]))
-					j = i;
-			if (Math.abs(rref[j][c]) < 0.00001)
-				continue;
+	public static double[][] inverse(double[][] matrix) {
+		double[][] inverse = new double[matrix.length][matrix.length];
 
-			double[] temp = rref[j];
-			rref[j] = rref[r];
-			rref[r] = temp;
-
-			double s = 1.0 / rref[r][c];
-			for (j = 0; j < rref[0].length; j++)
-				rref[r][j] *= s;
-			for (int i = 0; i < rref.length; i++) {
-				if (i != r) {
-					double t = rref[i][c];
-					for (j = 0; j < rref[0].length; j++)
-						rref[i][j] -= t * rref[r][j];
-				}
+		// minors and cofactors
+		for (int i = 0; i < matrix.length; i++)
+			for (int j = 0; j < matrix[i].length; j++) {
+				inverse[i][j] = Math.pow(-1, i + j) * determinant(minor(matrix, i, j));
 			}
-			r++;
+
+		// adjugate and determinant
+		double det = 1.0 / determinant(matrix);
+		for (int i = 0; i < inverse.length; i++) {
+			for (int j = 0; j <= i; j++) {
+				double temp = inverse[i][j];
+				inverse[i][j] = inverse[j][i] * det;
+				inverse[j][i] = temp * det;
+			}
 		}
 
-		return rref;
+		return inverse;
+	}
+
+	public static double determinant(double[][] matrix) {
+		if (matrix.length != matrix[0].length) {
+			throw new IllegalStateException("Dimensions are invalid...");
+		}
+
+		if (matrix.length == 2) {
+			return matrix[0][0] * matrix[1][1] - matrix[0][1] * matrix[1][0];
+		}
+		double det = 0;
+		for (int i = 0; i < matrix[0].length; i++) {
+			det += Math.pow(-1, i) * matrix[0][i] * determinant(minor(matrix, 0, i));
+		}
+		return det;
+	}
+
+	private static double[][] minor(double[][] matrix, int row, int column) {
+		double[][] minor = new double[matrix.length - 1][matrix.length - 1];
+
+		for (int i = 0; i < matrix.length; i++)
+			for (int j = 0; i != row && j < matrix[i].length; j++)
+				if (j != column)
+					minor[i < row ? i : i - 1][j < column ? j : j - 1] = matrix[i][j];
+		return minor;
+	}
+
+	public static double[][] rref(double[][] matrix) {
+		double[][] rrefArray = new double[matrix.length][];
+		for (int i = 0; i < matrix.length; i++) {
+			rrefArray[i] = Arrays.copyOf(matrix[i], matrix[i].length);
+		}
+
+		int currentRow = 0;
+		for (int currentColumn = 0; currentColumn < rrefArray[0].length
+				&& currentRow < rrefArray.length; currentColumn++) {
+			int j = currentRow;
+			for (int i = currentRow + 1; i < rrefArray.length; i++)
+				if (Math.abs(rrefArray[i][currentColumn]) > Math.abs(rrefArray[j][currentColumn]))
+					j = i;
+			if (Math.abs(rrefArray[j][currentColumn]) < 0.00001)
+				continue;
+
+			double[] temp = rrefArray[j];
+			rrefArray[j] = rrefArray[currentRow];
+			rrefArray[currentRow] = temp;
+
+			double s = 1.0 / rrefArray[currentRow][currentColumn];
+			for (j = 0; j < rrefArray[0].length; j++)
+				rrefArray[currentRow][j] *= s;
+			for (int i = 0; i < rrefArray.length; i++) {
+				if (i != currentRow) {
+					double t = rrefArray[i][currentColumn];
+					for (j = 0; j < rrefArray[0].length; j++)
+						rrefArray[i][j] -= t * rrefArray[currentRow][j];
+				}
+			}
+			currentRow++;
+		}
+
+		return rrefArray;
 	}
 
 	public Matrix subtractMatrices(Matrix firstMatrix, Matrix secondMatrix) {
 		if (areSameDimensions(firstMatrix, secondMatrix)) {
 
-			int[][] newData = new int[firstMatrix.getRow()][firstMatrix.getColumn()];
+			double[][] newData = new double[firstMatrix.getRow()][firstMatrix.getColumn()];
 			Matrix subMatrix = new Matrix("" + firstMatrix.getName() + "-" + secondMatrix.getName(),
 					firstMatrix.getRow(), firstMatrix.getColumn());
 			for (int row = 0; row < firstMatrix.getCurrentMatrix().length; row++) {
 				for (int col = 0; col < firstMatrix.getCurrentMatrix()[row].length; col++) {
-					int sub = firstMatrix.getCurrentMatrix()[row][col] - secondMatrix.getCurrentMatrix()[row][col];
+					double sub = firstMatrix.getCurrentMatrix()[row][col] - secondMatrix.getCurrentMatrix()[row][col];
 					newData[row][col] = sub;
 				}
 			}
@@ -126,13 +184,13 @@ public class MatrixCalculator {
 						// System.out.print(secondColumn);
 						// System.out.println(" ");
 
-						int firstValue = firstMatrix.getCurrentMatrix()[firstRow][firstColumn];
-						int secondValue = secondMatrix.getCurrentMatrix()[secondRow][secondColumn];
+						double firstValue = firstMatrix.getCurrentMatrix()[firstRow][firstColumn];
+						double secondValue = secondMatrix.getCurrentMatrix()[secondRow][secondColumn];
 
 						// System.out.println("===" + firstValue);
 						// System.out.println("===" + secondValue);
 
-						int product = firstValue * secondValue;
+						double product = firstValue * secondValue;
 						positionValue += product;
 						firstColumn++;
 						secondRow++;
@@ -165,7 +223,7 @@ public class MatrixCalculator {
 
 		formatData(listOfRows);
 
-		int[][] newResult = new int[tempMatrix.getRow()][tempMatrix.getColumn()];
+		double[][] newResult = new double[tempMatrix.getRow()][tempMatrix.getColumn()];
 
 		int currentRow = 0;
 		int currentColumn = 0;
@@ -262,7 +320,7 @@ public class MatrixCalculator {
 		}
 	}
 
-	public void setCurrentDataMatrix_List(String name, int[][] currentData, int row, int column) {
+	public void setCurrentDataMatrix_List(String name, double[][] currentData, int row, int column) {
 
 		int index = 0;
 		loop: for (Matrix eachMatrix : listOfMatrix) {

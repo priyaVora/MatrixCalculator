@@ -12,33 +12,13 @@ import model.Matrix;
 public class MatrixTest {
 
 	@Test
-	public void testInverseMatrix() {
-		assertFalse(true);
-	}
-
-	@Test
-	public void testDetMatrix2X2() {
-		assertFalse(true);
-	}
-
-	@Test
-	public void testDetMatrix3X3() {
-		assertFalse(true);
-	}
-
-	@Test
-	public void testInverseMatrix3X3_RowOperations() {
-		assertFalse(true);
-	}
-
-	@Test
-	public void testTransposeMatrix2X2() {
-		assertFalse(true);
-	}
-
-	@Test
-	public void testTransposeMatrix3X3() {
-		assertFalse(true);
+	public void testDeterminant() {
+		MatrixCalculator cal = new MatrixCalculator();
+		Matrix a = new Matrix("A", 3, 3);
+		Matrix expectedMatrix = new Matrix("A", 3, 3);
+		int[][] a_data = new int[3][3];
+		int expectedDeterminant = -7;
+		// cal.determinant(a.getCurrentMatrix());
 	}
 
 	@Test
@@ -47,28 +27,9 @@ public class MatrixTest {
 		Matrix a = new Matrix("A", 3, 4);
 
 		Matrix expected = new Matrix("A", 3, 4);
+		double[][] expectedData = new double[3][4];
 
-		int[][] a_data = new int[3][4];
-		int[][] expectedData = new int[3][4];
-
-		a_data[0][0] = 1;
-		a_data[0][1] = -2;
-		a_data[0][2] = 3;
-		a_data[0][3] = 7;
-
-		a_data[1][0] = 2;
-		a_data[1][1] = 1;
-		a_data[1][2] = 1;
-		a_data[1][3] = 4;
-
-		a_data[2][0] = -3;
-		a_data[2][1] = 2;
-		a_data[2][2] = -2;
-		a_data[2][3] = -10;
-
-		////////////////////
 		double[][] a_data1 = new double[3][4];
-		double[][] expectedData1 = new double[3][4];
 
 		a_data1[0][0] = 1;
 		a_data1[0][1] = -2;
@@ -85,31 +46,42 @@ public class MatrixTest {
 		a_data1[2][2] = -2;
 		a_data1[2][3] = -10;
 
-		expectedData1[0][0] = 1;
-		expectedData1[0][1] = 0;
-		expectedData1[0][2] = 0;
-		expectedData1[0][3] = 2;
+		expectedData[0][0] = 1;
+		expectedData[0][1] = 0;
+		expectedData[0][2] = 0;
+		expectedData[0][3] = 2;
 
-		expectedData1[1][0] = 0;
-		expectedData1[1][1] = 1;
-		expectedData1[1][2] = 0;
-		expectedData1[1][3] = -1;
+		expectedData[1][0] = 0;
+		expectedData[1][1] = 1;
+		expectedData[1][2] = 0;
+		expectedData[1][3] = -1;
 
-		expectedData1[2][0] = 0;
-		expectedData1[2][1] = 0;
-		expectedData1[2][2] = 1;
-		expectedData1[2][3] = 1;
+		expectedData[2][0] = 0;
+		expectedData[2][1] = 0;
+		expectedData[2][2] = 1;
+		expectedData[2][3] = 1;
 
-		a.setCurrentMatrix(a_data);
+		a.setCurrentMatrix(a_data1);
 		expected.setCurrentMatrix(expectedData);
 		double[][] theResult = cal.rref(a_data1);
 
 		int count = 0;
-		Matrix newResult = new Matrix();
+		double[][] resultAsInteger = new double[theResult.length][theResult[0].length];
 		for (int i = 0; i < theResult.length; i++) {
 			for (int j = 0; j < theResult[0].length; j++) {
+				System.out.print(Math.round(theResult[i][j]) + " ");
+				resultAsInteger[i][j] = (int) (Math.round(theResult[i][j]));
 			}
 			System.out.println(" ");
+		}
+
+		Matrix resultMatrix = new Matrix("A", 3, 4);
+		resultMatrix.setCurrentMatrix(resultAsInteger);
+
+		if (cal.areSameMatrices(expected, resultMatrix)) {
+			assertTrue(true);
+		} else {
+			assertTrue(false);
 		}
 	}
 
@@ -121,9 +93,9 @@ public class MatrixTest {
 
 		Matrix expected = new Matrix("A+B", 2, 2);
 
-		int[][] a_data = new int[2][2];
-		int[][] b_data = new int[2][2];
-		int[][] expectedData = new int[2][2];
+		double[][] a_data = new double[2][2];
+		double[][] b_data = new double[2][2];
+		double[][] expectedData = new double[2][2];
 
 		a_data[0][0] = 2;
 		a_data[0][1] = 2;
@@ -161,9 +133,9 @@ public class MatrixTest {
 
 		Matrix expected = new Matrix("A+B", 2, 4);
 
-		int[][] a_data = new int[2][4];
-		int[][] b_data = new int[2][4];
-		int[][] expectedData = new int[2][4];
+		double[][] a_data = new double[2][4];
+		double[][] b_data = new double[2][4];
+		double[][] expectedData = new double[2][4];
 
 		a_data[0][0] = 2;
 		a_data[0][1] = 4;
@@ -216,9 +188,9 @@ public class MatrixTest {
 
 		Matrix expected = new Matrix("A-B", 2, 4);
 
-		int[][] a_data = new int[2][4];
-		int[][] b_data = new int[2][4];
-		int[][] expectedData = new int[2][4];
+		double[][] a_data = new double[2][4];
+		double[][] b_data = new double[2][4];
+		double[][] expectedData = new double[2][4];
 
 		a_data[0][0] = 2;
 		a_data[0][1] = 4;
@@ -271,9 +243,9 @@ public class MatrixTest {
 
 		Matrix expected = new Matrix("B-A", 2, 4);
 
-		int[][] a_data = new int[2][4];
-		int[][] b_data = new int[2][4];
-		int[][] expectedData = new int[2][4];
+		double[][] a_data = new double[2][4];
+		double[][] b_data = new double[2][4];
+		double[][] expectedData = new double[2][4];
 
 		a_data[0][0] = 2;
 		a_data[0][1] = 4;
@@ -326,9 +298,9 @@ public class MatrixTest {
 
 		Matrix expected = new Matrix("A*B", 2, 4);
 
-		int[][] a_data = new int[2][3];
-		int[][] b_data = new int[3][4];
-		int[][] expectedData = new int[2][4];
+		double[][] a_data = new double[2][3];
+		double[][] b_data = new double[3][4];
+		double[][] expectedData = new double[2][4];
 
 		a_data[0][0] = 2;
 		a_data[0][1] = 4;
@@ -384,9 +356,9 @@ public class MatrixTest {
 
 		Matrix expected = new Matrix("A*B", 2, 2);
 
-		int[][] a_data = new int[2][2];
-		int[][] b_data = new int[2][2];
-		int[][] expectedData = new int[2][2];
+		double[][] a_data = new double[2][2];
+		double[][] b_data = new double[2][2];
+		double[][] expectedData = new double[2][2];
 
 		a_data[0][0] = -4;
 		a_data[0][1] = 6;
@@ -427,9 +399,9 @@ public class MatrixTest {
 
 		Matrix expected = new Matrix("A*B", 2, 2);
 
-		int[][] a_data = new int[2][3];
-		int[][] b_data = new int[3][2];
-		int[][] expectedData = new int[2][2];
+		double[][] a_data = new double[2][3];
+		double[][] b_data = new double[3][2];
+		double[][] expectedData = new double[2][2];
 
 		a_data[0][0] = 2;
 		a_data[0][1] = 1;
@@ -536,7 +508,7 @@ public class MatrixTest {
 	public void setMatrix() {
 		MatrixCalculator cal = createTestMatrix();
 
-		int[][] expectedData = makeCurrentData(1997);
+		double[][] expectedData = makeCurrentData(1997);
 		int row = expectedData.length;
 		int column = expectedData[0].length;
 		cal.setCurrentDataMatrix_List("A", expectedData, row, column);
@@ -556,8 +528,8 @@ public class MatrixTest {
 		}
 	}
 
-	public int[][] makeCurrentData(int number) {
-		int[][] currentData1 = new int[5][15];
+	public double[][] makeCurrentData(int number) {
+		double[][] currentData1 = new double[5][15];
 
 		for (int row = 0; row < currentData1.length; row++) {
 			for (int col = 0; col < currentData1[row].length; col++) {

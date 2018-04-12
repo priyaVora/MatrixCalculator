@@ -6,7 +6,7 @@ public class Matrix {
 	private Integer row = 0;
 	private Integer column = 0;
 
-	int[][] currentMatrix = new int[0][0];
+	double[][] currentMatrix = new double[0][0];
 
 	public Matrix(String name, Integer row, Integer column) {
 		this.name = name;
@@ -17,7 +17,7 @@ public class Matrix {
 
 	private void createDefaultMatrix() {
 		if (!(row == 0 || column == 0)) {
-			currentMatrix = new int[row][column];
+			currentMatrix = new double[row][column];
 			for (int row = 0; row < currentMatrix.length; row++) {
 				for (int col = 0; col < currentMatrix[row].length; col++) {
 					currentMatrix[row][col] = 0;
@@ -54,11 +54,11 @@ public class Matrix {
 		this.column = column;
 	}
 
-	public int[][] getCurrentMatrix() {
+	public double[][] getCurrentMatrix() {
 		return currentMatrix;
 	}
 
-	public void setCurrentMatrix(int[][] currentMatrix) {
+	public void setCurrentMatrix(double[][] currentMatrix) {
 		this.currentMatrix = currentMatrix;
 		// printMatrix();
 	}
