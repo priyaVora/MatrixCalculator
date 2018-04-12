@@ -12,6 +12,108 @@ import model.Matrix;
 public class MatrixTest {
 
 	@Test
+	public void testInverseMatrix() {
+		assertFalse(true);
+	}
+
+	@Test
+	public void testDetMatrix2X2() {
+		assertFalse(true);
+	}
+
+	@Test
+	public void testDetMatrix3X3() {
+		assertFalse(true);
+	}
+
+	@Test
+	public void testInverseMatrix3X3_RowOperations() {
+		assertFalse(true);
+	}
+
+	@Test
+	public void testTransposeMatrix2X2() {
+		assertFalse(true);
+	}
+
+	@Test
+	public void testTransposeMatrix3X3() {
+		assertFalse(true);
+	}
+
+	@Test
+	public void testRREF() {
+		MatrixCalculator cal = new MatrixCalculator();
+		Matrix a = new Matrix("A", 3, 4);
+
+		Matrix expected = new Matrix("A", 3, 4);
+
+		int[][] a_data = new int[3][4];
+		int[][] expectedData = new int[3][4];
+
+		a_data[0][0] = 1;
+		a_data[0][1] = -2;
+		a_data[0][2] = 3;
+		a_data[0][3] = 7;
+
+		a_data[1][0] = 2;
+		a_data[1][1] = 1;
+		a_data[1][2] = 1;
+		a_data[1][3] = 4;
+
+		a_data[2][0] = -3;
+		a_data[2][1] = 2;
+		a_data[2][2] = -2;
+		a_data[2][3] = -10;
+
+		////////////////////
+		double[][] a_data1 = new double[3][4];
+		double[][] expectedData1 = new double[3][4];
+
+		a_data1[0][0] = 1;
+		a_data1[0][1] = -2;
+		a_data1[0][2] = 3;
+		a_data1[0][3] = 7;
+
+		a_data1[1][0] = 2;
+		a_data1[1][1] = 1;
+		a_data1[1][2] = 1;
+		a_data1[1][3] = 4;
+
+		a_data1[2][0] = -3;
+		a_data1[2][1] = 2;
+		a_data1[2][2] = -2;
+		a_data1[2][3] = -10;
+
+		expectedData1[0][0] = 1;
+		expectedData1[0][1] = 0;
+		expectedData1[0][2] = 0;
+		expectedData1[0][3] = 2;
+
+		expectedData1[1][0] = 0;
+		expectedData1[1][1] = 1;
+		expectedData1[1][2] = 0;
+		expectedData1[1][3] = -1;
+
+		expectedData1[2][0] = 0;
+		expectedData1[2][1] = 0;
+		expectedData1[2][2] = 1;
+		expectedData1[2][3] = 1;
+
+		a.setCurrentMatrix(a_data);
+		expected.setCurrentMatrix(expectedData);
+		double[][] theResult = cal.rref(a_data1);
+
+		int count = 0;
+		Matrix newResult = new Matrix();
+		for (int i = 0; i < theResult.length; i++) {
+			for (int j = 0; j < theResult[0].length; j++) {
+			}
+			System.out.println(" ");
+		}
+	}
+
+	@Test
 	public void testMatrixAddition() {
 		MatrixCalculator cal = new MatrixCalculator();
 		Matrix a = new Matrix("A", 2, 2);

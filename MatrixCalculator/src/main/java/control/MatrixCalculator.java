@@ -2,6 +2,7 @@ package control;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
@@ -33,6 +34,40 @@ public class MatrixCalculator {
 			System.out.println("Dimensions are not same...");
 		}
 		return null;
+	}
+
+	public static double[][] rref(double[][] matrix) {
+		double[][] rref = new double[matrix.length][];
+		for (int i = 0; i < matrix.length; i++)
+			rref[i] = Arrays.copyOf(matrix[i], matrix[i].length);
+
+		int r = 0;
+		for (int c = 0; c < rref[0].length && r < rref.length; c++) {
+			int j = r;
+			for (int i = r + 1; i < rref.length; i++)
+				if (Math.abs(rref[i][c]) > Math.abs(rref[j][c]))
+					j = i;
+			if (Math.abs(rref[j][c]) < 0.00001)
+				continue;
+
+			double[] temp = rref[j];
+			rref[j] = rref[r];
+			rref[r] = temp;
+
+			double s = 1.0 / rref[r][c];
+			for (j = 0; j < rref[0].length; j++)
+				rref[r][j] *= s;
+			for (int i = 0; i < rref.length; i++) {
+				if (i != r) {
+					double t = rref[i][c];
+					for (j = 0; j < rref[0].length; j++)
+						rref[i][j] -= t * rref[r][j];
+				}
+			}
+			r++;
+		}
+
+		return rref;
 	}
 
 	public Matrix subtractMatrices(Matrix firstMatrix, Matrix secondMatrix) {
