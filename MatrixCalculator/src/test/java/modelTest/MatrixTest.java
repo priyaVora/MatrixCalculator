@@ -12,6 +12,40 @@ import model.Matrix;
 public class MatrixTest {
 
 	@Test
+	public void testShowingWork_addition() {
+		MatrixCalculator cal = new MatrixCalculator();
+		Matrix a = new Matrix("A", 2, 2);
+		Matrix b = new Matrix("B", 2, 2);
+
+		Matrix expected = new Matrix("A+B", 2, 2);
+
+		double[][] a_data = new double[2][2];
+		double[][] b_data = new double[2][2];
+		double[][] expectedData = new double[2][2];
+
+		a_data[0][0] = 2;
+		a_data[0][1] = 2;
+		a_data[1][0] = 2;
+		a_data[1][1] = 2;
+
+		b_data[0][0] = 2;
+		b_data[0][1] = 2;
+		b_data[1][0] = 2;
+		b_data[1][1] = 2;
+
+		expectedData[0][0] = 4;
+		expectedData[0][1] = 4;
+		expectedData[1][0] = 4;
+		expectedData[1][1] = 4;
+
+		a.setCurrentMatrix(a_data);
+		b.setCurrentMatrix(b_data);
+		expected.setCurrentMatrix(expectedData);
+
+		Matrix resultMatrix = cal.addMatrices(a, b);
+	}
+
+	@Test
 	public void testDeterminant() {
 		MatrixCalculator cal = new MatrixCalculator();
 		Matrix a = new Matrix("A", 3, 3);
@@ -444,6 +478,7 @@ public class MatrixTest {
 		MatrixCalculator cal = new MatrixCalculator();
 		Matrix a = new Matrix("A", 3, 5);
 		Matrix b = new Matrix("B", 3, 5);
+		
 
 		assertTrue(cal.areSameDimensions(a, b));
 	}

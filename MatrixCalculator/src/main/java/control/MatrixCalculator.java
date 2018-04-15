@@ -1,6 +1,7 @@
 package control;
 
 import java.lang.reflect.Array;
+import java.security.KeyStore.SecretKeyEntry;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -9,25 +10,61 @@ import java.util.Queue;
 
 import javax.management.Query;
 
+import com.sun.org.apache.xerces.internal.parsers.SecurityConfiguration;
+
 import model.Matrix;
 
 public class MatrixCalculator {
 	private ArrayList<Matrix> listOfMatrix = new ArrayList<Matrix>();
 	private List<String> keySet = new ArrayList<String>();
 
+	private String[][] showWorkAddition;
+	private String[][] showWorkSubtraction;
+
+	private String[][] answerAddition;
+	private String[][] answerSubtraction;
+
+	private String[][] showWorkMultiplication;
+
+	public void printData(String[][] data) {
+		for (int i = 0; i < data.length; i++) {
+			for (int j = 0; j < data[0].length; j++) {
+				System.out.print(data[i][j] = " ");
+			}
+			System.out.println(" ");
+		}
+	}
+
+	public void printData(double[][] data) {
+		for (int i = 0; i < data.length; i++) {
+			for (int j = 0; j < data[0].length; j++) {
+				System.out.println(data[i][j] + " ");
+			}
+			System.out.println(" ");
+		}
+	}
+
 	public Matrix addMatrices(Matrix firstMatrix, Matrix secondMatrix) {
 		if (areSameDimensions(firstMatrix, secondMatrix)) {
 
 			double[][] newData = new double[firstMatrix.getRow()][firstMatrix.getColumn()];
+			String[][] showWork = new String[firstMatrix.getRow()][firstMatrix.getColumn()];
+			String[][] answer = new String[firstMatrix.getRow()][firstMatrix.getColumn()];
+
 			Matrix addedMatrix = new Matrix("" + firstMatrix.getName() + "+" + secondMatrix.getName(),
 					firstMatrix.getRow(), firstMatrix.getColumn());
 			for (int row = 0; row < firstMatrix.getCurrentMatrix().length; row++) {
 				for (int col = 0; col < firstMatrix.getCurrentMatrix()[row].length; col++) {
+					showWork[row][col] = "(" + firstMatrix.getCurrentMatrix()[row][col] + ")" + " + " + "("
+							+ secondMatrix.getCurrentMatrix()[row][col] + ")";
 					double add = firstMatrix.getCurrentMatrix()[row][col] + secondMatrix.getCurrentMatrix()[row][col];
+					answer[row][col] = "(" + add + ")";
 					newData[row][col] = add;
 				}
 			}
 
+			showWorkAddition = showWork;
+			answerAddition = answer;
 			addedMatrix.setCurrentMatrix(newData);
 			return addedMatrix;
 		} else {
@@ -132,15 +169,24 @@ public class MatrixCalculator {
 		if (areSameDimensions(firstMatrix, secondMatrix)) {
 
 			double[][] newData = new double[firstMatrix.getRow()][firstMatrix.getColumn()];
+			String[][] showWork = new String[firstMatrix.getRow()][firstMatrix.getColumn()];
+			String[][] answer = new String[firstMatrix.getRow()][firstMatrix.getColumn()];
+
 			Matrix subMatrix = new Matrix("" + firstMatrix.getName() + "-" + secondMatrix.getName(),
 					firstMatrix.getRow(), firstMatrix.getColumn());
 			for (int row = 0; row < firstMatrix.getCurrentMatrix().length; row++) {
 				for (int col = 0; col < firstMatrix.getCurrentMatrix()[row].length; col++) {
+					showWork[row][col] = "(" + firstMatrix.getCurrentMatrix()[row][col] + ")" + " + " + "("
+							+ secondMatrix.getCurrentMatrix()[row][col] + ")";
 					double sub = firstMatrix.getCurrentMatrix()[row][col] - secondMatrix.getCurrentMatrix()[row][col];
+					answer[row][col] = "(" + sub + ")";
 					newData[row][col] = sub;
+
 				}
 			}
 
+			showWorkSubtraction = showWork;
+			answerSubtraction = answer;
 			subMatrix.setCurrentMatrix(newData);
 			return subMatrix;
 		} else {
@@ -150,6 +196,10 @@ public class MatrixCalculator {
 	}
 
 	public Matrix multipyMatrices(Matrix firstMatrix, Matrix secondMatrix) {
+		int size = firstMatrix.getRow() * secondMatrix.getColumn();
+		String[] eachValue = new String[size];
+		String[][] showWork = new String[firstMatrix.getRow()][secondMatrix.getColumn()];
+
 		int operationCount = 0;
 		List<String> listOfRows = new ArrayList<String>();
 
@@ -171,52 +221,54 @@ public class MatrixCalculator {
 
 			int positionValue = 0;
 			String rowValue = "";
+			int indexPosition = 0;
+			String showWorkValue = "";
 			while (operationCount != row) {
 				for (int iterateSecondCol = 1; iterateSecondCol <= secondMatrix.getColumn(); iterateSecondCol++) {
 					for (int i = 0; i < secondMatrix.getRow(); i++) {
-						// System.out.println("\nFIRST");
-						// System.out.print(firstRow + ",");
-						// System.out.print(firstColumn);
-						// System.out.println(" ");
-						// System.out.println(" ");
-						// System.out.println("SECOND");
-						// System.out.print(secondRow + ",");
-						// System.out.print(secondColumn);
-						// System.out.println(" ");
 
 						double firstValue = firstMatrix.getCurrentMatrix()[firstRow][firstColumn];
 						double secondValue = secondMatrix.getCurrentMatrix()[secondRow][secondColumn];
 
-						// System.out.println("===" + firstValue);
-						// System.out.println("===" + secondValue);
-
 						double product = firstValue * secondValue;
+
+						showWorkValue += "(" + firstValue + ")(" + secondValue + ")" + " ";
 						positionValue += product;
 						firstColumn++;
 						secondRow++;
 					}
-
+					eachValue[indexPosition] = showWorkValue;
+					System.out.println(" ");
+					showWorkValue = "";
+					indexPosition++;
 					firstColumn = 0;
 					secondRow = 0;
 
 					rowValue += positionValue + " ";
-
-					// System.out.println("\tPosition: " + positionValue);
 
 					if (iterateSecondCol == secondMatrix.getColumn()) {
 						rowValue = rowValue.trim();
 						listOfRows.add(rowValue);
 					}
 					positionValue = 0;
-					// System.out.println("---------------------------------------------------");
 
 					secondColumn = iterateSecondCol;
+
 				}
+
 				operationCount++;
 				rowValue = "";
 				firstRow = operationCount;
 				secondRow = 0;
 				secondColumn = 0;
+			}
+
+			int count = 0;
+			for (int i = 0; i < firstMatrix.getRow(); i++) {
+				for (int j = 0; j < secondMatrix.getColumn(); j++) {
+					showWork[i][j] = eachValue[count];
+					count++;
+				}
 			}
 
 		}
@@ -238,6 +290,7 @@ public class MatrixCalculator {
 		}
 		resultMatrix.setCurrentMatrix(newResult);
 		resultMatrix.printMatrix();
+		showWorkMultiplication = showWork;
 		return resultMatrix;
 	}
 
@@ -418,6 +471,26 @@ public class MatrixCalculator {
 
 	public List<String> getKeySet() {
 		return keySet;
+	}
+
+	public String[][] getShowWorkAddition() {
+		return showWorkAddition;
+	}
+
+	public String[][] getShowWorkSubtraction() {
+		return showWorkSubtraction;
+	}
+
+	public String[][] getAnswerAddition() {
+		return answerAddition;
+	}
+
+	public String[][] getAnswerSubtraction() {
+		return answerSubtraction;
+	}
+
+	public String[][] getShowWorkMultiplication() {
+		return showWorkMultiplication;
 	}
 
 }
