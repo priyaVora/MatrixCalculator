@@ -232,11 +232,13 @@ public class MatrixCalculator {
 
 						double product = firstValue * secondValue;
 
-						showWorkValue += "(" + firstValue + ")(" + secondValue + ")" + " ";
+						showWorkValue += "(" + firstValue + ")(" + secondValue + ")" + "+";
 						positionValue += product;
 						firstColumn++;
 						secondRow++;
 					}
+					showWorkValue = showWorkValue.trim();
+					showWorkValue = showWorkValue.substring(0, showWorkValue.length()-1);
 					eachValue[indexPosition] = showWorkValue;
 					System.out.println(" ");
 					showWorkValue = "";
@@ -267,8 +269,10 @@ public class MatrixCalculator {
 			for (int i = 0; i < firstMatrix.getRow(); i++) {
 				for (int j = 0; j < secondMatrix.getColumn(); j++) {
 					showWork[i][j] = eachValue[count];
+					System.out.print(showWork[i][j] + " ");
 					count++;
 				}
+				System.out.println(" ");
 			}
 
 		}
