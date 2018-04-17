@@ -25,6 +25,7 @@ public class MatrixCalculator {
 	private String[][] answerSubtraction;
 
 	private String[][] showWorkMultiplication;
+	private String[][] answerMultiplication;
 
 	public void printData(String[][] data) {
 		for (int i = 0; i < data.length; i++) {
@@ -197,6 +198,7 @@ public class MatrixCalculator {
 
 	public Matrix multipyMatrices(Matrix firstMatrix, Matrix secondMatrix) {
 		int size = firstMatrix.getRow() * secondMatrix.getColumn();
+		answerMultiplication = new String[firstMatrix.getRow()][secondMatrix.getColumn()];
 		String[] eachValue = new String[size];
 		String[][] showWork = new String[firstMatrix.getRow()][secondMatrix.getColumn()];
 
@@ -238,7 +240,7 @@ public class MatrixCalculator {
 						secondRow++;
 					}
 					showWorkValue = showWorkValue.trim();
-					showWorkValue = showWorkValue.substring(0, showWorkValue.length()-1);
+					showWorkValue = showWorkValue.substring(0, showWorkValue.length() - 1);
 					eachValue[indexPosition] = showWorkValue;
 					System.out.println(" ");
 					showWorkValue = "";
@@ -291,6 +293,11 @@ public class MatrixCalculator {
 			}
 			currentRow++;
 			currentColumn = 0;
+		}
+		for (int i = 0; i < newResult.length; i++) {
+			for (int j = 0; j < newResult.length; j++) {
+				answerMultiplication[i][j] = "" + newResult[i][j];
+			}
 		}
 		resultMatrix.setCurrentMatrix(newResult);
 		resultMatrix.printMatrix();
@@ -495,6 +502,10 @@ public class MatrixCalculator {
 
 	public String[][] getShowWorkMultiplication() {
 		return showWorkMultiplication;
+	}
+
+	public String[][] getAnswerMultiplication() {
+		return answerMultiplication;
 	}
 
 }
