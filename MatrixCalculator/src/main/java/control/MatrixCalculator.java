@@ -176,7 +176,7 @@ public class MatrixCalculator {
 					firstMatrix.getRow(), firstMatrix.getColumn());
 			for (int row = 0; row < firstMatrix.getCurrentMatrix().length; row++) {
 				for (int col = 0; col < firstMatrix.getCurrentMatrix()[row].length; col++) {
-					showWork[row][col] = "(" + firstMatrix.getCurrentMatrix()[row][col] + ")" + " + " + "("
+					showWork[row][col] = "(" + firstMatrix.getCurrentMatrix()[row][col] + ")" + " - " + "("
 							+ secondMatrix.getCurrentMatrix()[row][col] + ")";
 					double sub = firstMatrix.getCurrentMatrix()[row][col] - secondMatrix.getCurrentMatrix()[row][col];
 					answer[row][col] = "(" + sub + ")";
