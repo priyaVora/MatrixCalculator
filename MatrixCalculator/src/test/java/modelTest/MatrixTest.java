@@ -46,6 +46,85 @@ public class MatrixTest {
 	}
 
 	@Test
+	public void testShowingWork_Inverse() {
+		MatrixCalculator cal = new MatrixCalculator();
+		Matrix a = new Matrix("A", 2, 2);
+		Matrix b = new Matrix("B", 2, 2);
+
+		Matrix expected = new Matrix("A+B", 2, 2);
+
+		double[][] a_data = new double[2][2];
+		double[][] expectedData = new double[2][2];
+
+		a_data[0][0] = 23;
+		a_data[0][1] = 23;
+		a_data[1][0] = 23;
+		a_data[1][1] = 23;
+
+		expectedData[0][0] = 23;
+		expectedData[0][1] = 23;
+		expectedData[1][0] = 23;
+		expectedData[1][1] = 23;
+
+		a.setCurrentMatrix(a_data);
+
+		// expected.setCurrentMatrix(expectedData);
+
+		System.out.println("/////////////");
+		double[][] result = cal.inverse(a_data);
+		System.out.println("/////////////");
+		System.out.println("Is result null? - " + result.length);
+		Matrix resultMatrix = new Matrix();
+		resultMatrix.setCurrentMatrix(result);
+		resultMatrix.printMatrix();
+
+	}
+
+	@Test
+	public void testShowingWork_Inverse3by3() {
+		MatrixCalculator cal = new MatrixCalculator();
+		Matrix a = new Matrix("A", 3, 3);
+		Matrix b = new Matrix("B", 3, 3);
+
+		Matrix expected = new Matrix("A+B", 3, 3);
+
+		double[][] a_data = new double[3][3];
+		double[][] expectedData = new double[3][3];
+
+		a_data[0][0] = 1;
+		a_data[0][1] = 1;
+		a_data[0][2] = -1;
+
+		a_data[1][0] = 3;
+		a_data[1][1] = -2;
+		a_data[1][2] = 1;
+
+		a_data[2][0] = 1;
+		a_data[2][1] = 3;
+		a_data[2][2] = -2;
+
+		expectedData[0][0] = 23;
+		expectedData[0][1] = 23;
+		expectedData[1][0] = 23;
+		expectedData[1][1] = 23;
+		expectedData[2][0] = 23;
+		expectedData[2][1] = 23;
+
+		a.setCurrentMatrix(a_data);
+
+		// expected.setCurrentMatrix(expectedData);
+
+		System.out.println("/////////////");
+		double[][] result = cal.inverse(a_data);
+		System.out.println("/////////////");
+		System.out.println("Is result null? - " + result.length);
+		Matrix resultMatrix = new Matrix();
+		resultMatrix.setCurrentMatrix(result);
+		resultMatrix.printMatrix();
+
+	}
+
+	@Test
 	public void testDeterminant() {
 		MatrixCalculator cal = new MatrixCalculator();
 		Matrix a = new Matrix("A", 3, 3);
@@ -478,7 +557,6 @@ public class MatrixTest {
 		MatrixCalculator cal = new MatrixCalculator();
 		Matrix a = new Matrix("A", 3, 5);
 		Matrix b = new Matrix("B", 3, 5);
-		
 
 		assertTrue(cal.areSameDimensions(a, b));
 	}

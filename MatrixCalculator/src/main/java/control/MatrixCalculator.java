@@ -83,12 +83,15 @@ public class MatrixCalculator {
 		return transpose;
 	}
 
-	public static double[][] inverse(double[][] matrix) {
+	public double[][] inverse(double[][] matrix) {
 		double[][] inverse = new double[matrix.length][matrix.length];
 
 		// minors and cofactors
 		for (int i = 0; i < matrix.length; i++)
 			for (int j = 0; j < matrix[i].length; j++) {
+				double firstSide = Math.pow(-1, i + j);
+				double secondSide = determinant(minor(matrix, i, j));
+
 				inverse[i][j] = Math.pow(-1, i + j) * determinant(minor(matrix, i, j));
 			}
 
@@ -97,6 +100,8 @@ public class MatrixCalculator {
 		for (int i = 0; i < inverse.length; i++) {
 			for (int j = 0; j <= i; j++) {
 				double temp = inverse[i][j];
+				double Nan = inverse[j][i] * det;
+				System.out.println("Double: " + Nan);
 				inverse[i][j] = inverse[j][i] * det;
 				inverse[j][i] = temp * det;
 			}
@@ -105,7 +110,11 @@ public class MatrixCalculator {
 		return inverse;
 	}
 
-	public static double determinant(double[][] matrix) {
+	public double determinant(double[][] matrix) {
+		if (matrix.length == 0) {
+			System.out.println("Determinant is Xero");
+			return 0;
+		}
 		if (matrix.length != matrix[0].length) {
 			throw new IllegalStateException("Dimensions are invalid...");
 		}
