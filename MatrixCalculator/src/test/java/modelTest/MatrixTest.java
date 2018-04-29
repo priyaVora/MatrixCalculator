@@ -49,7 +49,7 @@ public class MatrixTest {
 	}
 
 	@Test
-	public void testShowingWork_Inverse() {
+	public void testShowingWork_Inverse() throws FileNotFoundException {
 		MatrixCalculator cal = new MatrixCalculator();
 		Matrix a = new Matrix("A", 2, 2);
 		Matrix b = new Matrix("B", 2, 2);
@@ -84,7 +84,7 @@ public class MatrixTest {
 	}
 
 	@Test
-	public void inverse3by3_Second() {
+	public void inverse3by3_Second() throws FileNotFoundException {
 		MatrixCalculator cal = new MatrixCalculator();
 		Matrix a = new Matrix("A", 3, 3);
 		Matrix b = new Matrix("B", 3, 3);
@@ -130,7 +130,7 @@ public class MatrixTest {
 	}
 
 	@Test
-	public void testShowingWork_Inverse3by3() {
+	public void testShowingWork_Inverse3by3() throws FileNotFoundException {
 		MatrixCalculator cal = new MatrixCalculator();
 		Matrix a = new Matrix("A", 3, 3);
 		Matrix b = new Matrix("B", 3, 3);
@@ -182,12 +182,27 @@ public class MatrixTest {
 	}
 
 	@Test
-	public void testDeterminant() {
+	public void testDeterminant() throws FileNotFoundException {
 		MatrixCalculator cal = new MatrixCalculator();
 		Matrix a = new Matrix("A", 3, 3);
 		Matrix expectedMatrix = new Matrix("A", 3, 3);
-		int[][] a_data = new int[3][3];
-		int expectedDeterminant = -7;
+		double[][] a_data = new double[3][3];
+		a_data[0][0] = 1;
+		a_data[0][1] = 4;
+		a_data[0][2] = -3;
+
+		a_data[1][0] = 3;
+		a_data[1][1] = -1;
+		a_data[1][2] = 3;
+
+		a_data[2][0] = 1;
+		a_data[2][1] = 1;
+		a_data[2][2] = 6;
+
+		a.setCurrentMatrix(a_data);
+		double determinant = cal.determinant(a.getCurrentMatrix());
+		System.out.println("Determinant: " + determinant);
+
 		// cal.determinant(a.getCurrentMatrix());
 	}
 

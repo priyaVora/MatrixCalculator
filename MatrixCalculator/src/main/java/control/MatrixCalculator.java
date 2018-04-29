@@ -87,7 +87,7 @@ public class MatrixCalculator {
 		return transpose;
 	}
 
-	public double[][] inverse(double[][] matrix) {
+	public double[][] inverse(double[][] matrix) throws FileNotFoundException {
 		double[][] inverse = new double[matrix.length][matrix.length];
 
 		// minors and cofactors
@@ -114,11 +114,17 @@ public class MatrixCalculator {
 		return inverse;
 	}
 
-	public double determinant(double[][] matrix) {
+	public double determinant(double[][] matrix) throws FileNotFoundException {
+		String determinantfinalShow = "";
+		boolean folder = new File(System.getProperty("user.home") + "/Desktop" + "\\MatrixShowWork").mkdirs();
+		PrintWriter writer = new PrintWriter(
+				System.getProperty("user.home") + "/Desktop" + "\\MatrixShowWork" + "\\Determinant.txt");
 		if (matrix.length == 0) {
 			System.out.println("Determinant is Xero");
 			return 0;
 		}
+
+		int signCount = 0;
 		if (matrix.length != matrix[0].length) {
 			throw new IllegalStateException("Dimensions are invalid...");
 		}
@@ -128,8 +134,38 @@ public class MatrixCalculator {
 		}
 		double det = 0;
 		for (int i = 0; i < matrix[0].length; i++) {
-			det += Math.pow(-1, i) * matrix[0][i] * determinant(minor(matrix, 0, i));
+			double[][] minorCalculated = minor(matrix, 0, i);
+			System.out.println("Matrix Coefficient: " + matrix[0][i]);
+			writer.println("Matrix Coefficient: " + matrix[0][i]);
+			for (int j = 0; j < minorCalculated.length; j++) {
+				for (int j2 = 0; j2 < minorCalculated[0].length; j2++) {
+					System.out.print(" " + minorCalculated[j][j2] + " ");
+					writer.write(" " + minorCalculated[j][j2] + " ");
+				}
+				System.out.println(" ");
+				writer.println(" ");
+			}
+
+			det += Math.pow(-1, i) * matrix[0][i] * determinant(minorCalculated);
+
+			determinantfinalShow += "(" + matrix[0][i] + ")" + "*(" + determinant(minorCalculated) + ")";
+			if (signCount % 2 == 0) {
+				determinantfinalShow += "-";
+			} else {
+				determinantfinalShow += "+";
+			}
+			signCount++;
+
 		}
+		System.out.println("\nDETERMINANT PROCESS: ");
+		writer.println();
+		writer.println("\nDETERMINANT PROCESS: ");
+		determinantfinalShow = determinantfinalShow.substring(0, determinantfinalShow.length() - 1);
+		System.out.println(determinantfinalShow);
+		writer.println();
+		writer.println(determinantfinalShow);
+		writer.println("Determinant Value: " + det);
+		writer.close();
 		return det;
 	}
 
@@ -189,10 +225,11 @@ public class MatrixCalculator {
 	}
 
 	public double[][] rref(double[][] matrix) throws FileNotFoundException, UnsupportedEncodingException {
-		//System.out.println(System.getProperty("user.home") + "\\Desktop");
-		//File desktop = new File(System.getProperty("user.home") + "/Desktop");
+		// System.out.println(System.getProperty("user.home") + "\\Desktop");
+		// File desktop = new File(System.getProperty("user.home") + "/Desktop");
 		boolean folder = new File(System.getProperty("user.home") + "/Desktop" + "\\MatrixShowWork").mkdirs();
-		PrintWriter writer = new PrintWriter(System.getProperty("user.home") + "/Desktop" + "\\MatrixShowWork" + "\\ShowWork.txt");
+		PrintWriter writer = new PrintWriter(
+				System.getProperty("user.home") + "/Desktop" + "\\MatrixShowWork" + "\\ShowWork.txt");
 		// writer.println("The first line");
 		// writer.println("The second line");
 		// writer.close();
