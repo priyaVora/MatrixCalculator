@@ -165,6 +165,13 @@ public class MatrixCalculator {
 		writer.println();
 		writer.println(determinantfinalShow);
 		writer.println("Determinant Value: " + det);
+		if (det == 0) {
+			writer.println();
+			writer.println("DETERMINANT IS ZERO: THIS MEANS THAT THERE IS NO INVERSE.");
+			writer.println(
+					"HOWEVER THERE CAN BE ZERO OR NO SOLUTIONS FOR THIS MATRIX. USE ROW OPERATIONS TO SOLVE THE SYSTEM.");
+
+		}
 		writer.close();
 		return det;
 	}
