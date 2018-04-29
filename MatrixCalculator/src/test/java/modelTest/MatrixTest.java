@@ -81,6 +81,52 @@ public class MatrixTest {
 	}
 
 	@Test
+	public void inverse3by3_Second() {
+		MatrixCalculator cal = new MatrixCalculator();
+		Matrix a = new Matrix("A", 3, 3);
+		Matrix b = new Matrix("B", 3, 3);
+
+		Matrix expected = new Matrix("A+B", 3, 3);
+
+		double[][] a_data = new double[3][3];
+		double[][] expectedData = new double[3][3];
+
+		a_data[0][0] = 3;
+		a_data[0][1] = 3;
+		a_data[0][2] = 3;
+
+		a_data[1][0] = 43;
+		a_data[1][1] = 234;
+		a_data[1][2] = 234;
+
+		a_data[2][0] = 234;
+		a_data[2][1] = 234;
+		a_data[2][2] = 234;
+
+		expectedData[0][0] = -0.3333333333333333;
+		expectedData[0][1] = 0.3333333333333333;
+		expectedData[0][2] = 0.3333333333333333;
+		expectedData[1][0] = -2.333333333333333;
+		expectedData[1][1] = 0.3333333333333333;
+		expectedData[1][2] = 1.3333333333333333;
+		expectedData[2][0] = -3.6666666666666665;
+		expectedData[2][1] = 0.6666666666666666;
+		expectedData[2][2] = 1.6666666666666665;
+
+		a.setCurrentMatrix(a_data);
+
+		// expected.setCurrentMatrix(expectedData);
+
+		System.out.println("/////////////");
+		double[][] result = cal.inverse(a_data);
+		System.out.println("/////////////");
+		System.out.println("Is result null? - " + result.length);
+		Matrix resultMatrix = new Matrix();
+		resultMatrix.setCurrentMatrix(result);
+		resultMatrix.printMatrix();
+	}
+
+	@Test
 	public void testShowingWork_Inverse3by3() {
 		MatrixCalculator cal = new MatrixCalculator();
 		Matrix a = new Matrix("A", 3, 3);
@@ -103,16 +149,19 @@ public class MatrixTest {
 		a_data[2][1] = 3;
 		a_data[2][2] = -2;
 
-		expectedData[0][0] = 23;
-		expectedData[0][1] = 23;
-		expectedData[1][0] = 23;
-		expectedData[1][1] = 23;
-		expectedData[2][0] = 23;
-		expectedData[2][1] = 23;
+		expectedData[0][0] = -0.3333333333333333;
+		expectedData[0][1] = 0.3333333333333333;
+		expectedData[0][2] = 0.3333333333333333;
+		expectedData[1][0] = -2.333333333333333;
+		expectedData[1][1] = 0.3333333333333333;
+		expectedData[1][2] = 1.3333333333333333;
+		expectedData[2][0] = -3.6666666666666665;
+		expectedData[2][1] = 0.6666666666666666;
+		expectedData[2][2] = 1.6666666666666665;
 
 		a.setCurrentMatrix(a_data);
 
-		// expected.setCurrentMatrix(expectedData);
+		expected.setCurrentMatrix(expectedData);
 
 		System.out.println("/////////////");
 		double[][] result = cal.inverse(a_data);
@@ -121,6 +170,11 @@ public class MatrixTest {
 		Matrix resultMatrix = new Matrix();
 		resultMatrix.setCurrentMatrix(result);
 		resultMatrix.printMatrix();
+		if (cal.areSameMatrices(expected, resultMatrix)) {
+			assertTrue(true);
+		} else {
+			assertTrue(false);
+		}
 
 	}
 
@@ -137,6 +191,7 @@ public class MatrixTest {
 	@Test
 	public void testRREF() {
 		MatrixCalculator cal = new MatrixCalculator();
+
 		Matrix a = new Matrix("A", 3, 4);
 
 		Matrix expected = new Matrix("A", 3, 4);

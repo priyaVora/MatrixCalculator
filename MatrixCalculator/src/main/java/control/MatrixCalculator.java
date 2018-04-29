@@ -139,10 +139,50 @@ public class MatrixCalculator {
 		return minor;
 	}
 
-	public static double[][] rref(double[][] matrix) {
+	public String doubleToFraction(double doubleVal) {
+		double negligibleRatio = 0.01;
+		String val = "";
+
+		for (int i = 1;; i++) {
+			double tem = doubleVal / (1D / i);
+			if (Math.abs(tem - Math.round(tem)) < negligibleRatio) {
+
+				val = Math.round(tem) + "/" + i;
+
+				break;
+
+			}
+		}
+		return val;
+	}
+
+	public String changeValueToProperForm(double number) {
+		double calculate = number - Math.floor(number);
+
+		if (calculate == 0) {
+			// System.out.println(number + " is a whole number");
+			return number + "";
+		} else {
+			// System.out.println(" Number is not a whole number");
+			// System.out.println(doubleToFraction(number));
+			return doubleToFraction(number);
+		}
+	}
+
+	public double[][] rref(double[][] matrix) {
+		String[][] pivotMultiplicationWork = new String[500][500];
+		String[][] subtractionWork = new String[500][500];
 		double[][] rrefArray = new double[matrix.length][];
 		for (int i = 0; i < matrix.length; i++) {
 			rrefArray[i] = Arrays.copyOf(matrix[i], matrix[i].length);
+		}
+
+		System.out.println("Original Matrix: ");
+		for (int i = 0; i < rrefArray.length; i++) {
+			for (int j = 0; j < rrefArray[i].length; j++) {
+				System.out.print(changeValueToProperForm(rrefArray[i][j]) + " ");
+			}
+			System.out.println(" ");
 		}
 
 		int currentRow = 0;
@@ -156,22 +196,87 @@ public class MatrixCalculator {
 				continue;
 
 			double[] temp = rrefArray[j];
+			System.out.print("\nRow Focus: ");
+			for (int i = 0; i < temp.length; i++) {
+				System.out.print(changeValueToProperForm(temp[i]) + " ");
+			}
+			System.out.println(" ");
+			if ((j + 1) != (currentRow + 1)) {
+				System.out.println("Row Swap: " + (j + 1) + " with " + (currentRow + 1));
+			}
 			rrefArray[j] = rrefArray[currentRow];
 			rrefArray[currentRow] = temp;
 
 			double s = 1.0 / rrefArray[currentRow][currentColumn];
-			for (j = 0; j < rrefArray[0].length; j++)
+			System.out.println("Multiply: " + changeValueToProperForm(s));
+
+			for (j = 0; j < rrefArray[0].length; j++) {
 				rrefArray[currentRow][j] *= s;
+			}
+
+			System.out.println("\nMatrix Update: ");
+			for (int i = 0; i < rrefArray.length; i++) {
+				for (int k = 0; k < rrefArray[0].length; k++) {
+					System.out.print(changeValueToProperForm(rrefArray[i][k]) + " ");
+				}
+				System.out.println(" ");
+			}
+			double subtractionValue = 0;
+			int countRow = 0;
+			int countCol = 0;
 			for (int i = 0; i < rrefArray.length; i++) {
 				if (i != currentRow) {
 					double t = rrefArray[i][currentColumn];
-					for (j = 0; j < rrefArray[0].length; j++)
-						rrefArray[i][j] -= t * rrefArray[currentRow][j];
+
+					System.out.println("\nMulitply " + t + " Pivot: R" + (currentRow + 1));
+					pivotMultiplicationWork = new String[500][500];
+					for (j = 0; j < rrefArray[0].length; j++) {
+						subtractionValue = t * rrefArray[currentRow][j];
+						// System.out.println(t + "*(" +
+						// changeValueToProperForm(rrefArray[currentRow][j]) + ")");
+
+						pivotMultiplicationWork[countRow][countCol] = t + "*("
+								+ changeValueToProperForm(rrefArray[currentRow][j]) + ")";
+						System.out.println(pivotMultiplicationWork[countRow][countCol]);
+						System.out.println(pivotMultiplicationWork[countRow][countCol]);
+						System.out.println("Row: " + countRow);
+						System.out.println("Col: " + currentColumn);
+						countRow++;
+						if (countRow == rrefArray.length) {
+							countRow = 0;
+						}
+
+						if (countCol == rrefArray[0].length) {
+							countCol = 0;
+						}
+						countCol++;
+						System.out.println(changeValueToProperForm(rrefArray[i][j]) + "-" + subtractionValue);
+						rrefArray[i][j] -= subtractionValue;
+
+					}
+
+					System.out.println("\n\nOperation Type:  R" + (i + 1) + " = R" + (i + 1) + " minus " + "("
+							+ changeValueToProperForm(t) + ")" + ("R" + (+(currentRow + 1))));
+
+					for (int i1 = 0; i1 < rrefArray.length; i1++) {
+						for (int k = 0; k < rrefArray[0].length; k++) {
+							System.out.print("   " + changeValueToProperForm(rrefArray[i1][k]) + " ");
+						}
+						System.out.println();
+					}
+
 				}
+			}
+			System.out.println("\nEnd: Matrix Update: ");
+			for (int i = 0; i < rrefArray.length; i++) {
+				for (int k = 0; k < rrefArray[0].length; k++) {
+					System.out.print(changeValueToProperForm(rrefArray[i][k]) + " ");
+				}
+				System.out.println();
 			}
 			currentRow++;
 		}
-
+		System.out.println(" ");
 		return rrefArray;
 	}
 
