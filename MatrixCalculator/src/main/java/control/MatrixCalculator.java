@@ -41,7 +41,7 @@ public class MatrixCalculator {
 
 	}
 
-	public void grabsContentFromFile(String file1, String file2, String thankYou) {
+	public void grabsContentFromFile(String file1, String file2) {
 		FileReader fr = null;
 		FileWriter fw = null;
 		try {
@@ -52,7 +52,7 @@ public class MatrixCalculator {
 				fw.write(c);
 				c = fr.read();
 			}
-			fw.write(thankYou);
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		} finally {
@@ -161,76 +161,84 @@ public class MatrixCalculator {
 		// adjugate and determinant
 		double det = 1.0 / determinant(matrix);
 
-		grabsContentFromFile("Determinant.txt", "InverseMatrix.txt", "Thank you!");
+		grabsContentFromFile("Determinant.txt", "InverseMatrix.txt");
 
 		writer.write(System.getProperty("line.separator"));
 		writer.write("----------------------------------------------------------------------");
 		writer.newLine();
 
-		for (double[][] eachMinor : list) {
+		if (Double.isInfinite(det) == false) {
+			for (double[][] eachMinor : list) {
 
-			for (int i = 0; i < eachMinor.length; i++) {
-				for (int j = 0; j < eachMinor[0].length; j++) {
-					writer.write(" " + eachMinor[i][j] + " ");
+				for (int i = 0; i < eachMinor.length; i++) {
+					for (int j = 0; j < eachMinor[0].length; j++) {
+						writer.write(" " + eachMinor[i][j] + " ");
+					}
+
+					writer.newLine();
+
 				}
 
+				writer.write("------");
 				writer.newLine();
 
+				writer.newLine();
 			}
 
-			writer.write("------");
 			writer.newLine();
 
+			writer.write("----------------------------------------------------------------------");
+
 			writer.newLine();
-		}
+			writer.write("Before Secret Sign is Applied");
+			writer.newLine();
 
-		writer.newLine();
-
-		writer.write("----------------------------------------------------------------------");
-
-		writer.newLine();
-		writer.write("Before Secret Sign is Applied");
-		writer.newLine();
-
-		int countValues = 0;
-		double[][] v = new double[matrix.length][matrix[0].length];
-		for (int i = 0; i < matrix.length; i++) {
-			for (int j = 0; j < matrix[i].length; j++) {
-				v[i][j] = valueList.get(countValues);
-				writer.write(" " + v[i][j] + " ");
-				countValues++;
+			int countValues = 0;
+			double[][] v = new double[matrix.length][matrix[0].length];
+			for (int i = 0; i < matrix.length; i++) {
+				for (int j = 0; j < matrix[i].length; j++) {
+					v[i][j] = valueList.get(countValues);
+					writer.write(" " + v[i][j] + " ");
+					countValues++;
+				}
+				writer.newLine();
 			}
+
 			writer.newLine();
-		}
+			writer.write("After Secret Sign is Applied");
+			writer.newLine();
 
-		writer.newLine();
-		writer.write("After Secret Sign is Applied");
-		writer.newLine();
-
-		int countValues2 = 0;
-		double[][] v2 = new double[matrix.length][matrix[0].length];
-		for (int i = 0; i < matrix.length; i++) {
-			for (int j = 0; j < matrix[i].length; j++) {
-				v2[i][j] = secretSigns.get(countValues2);
-				writer.write(" " + v2[i][j] + " ");
-				countValues2++;
+			int countValues2 = 0;
+			double[][] v2 = new double[matrix.length][matrix[0].length];
+			for (int i = 0; i < matrix.length; i++) {
+				for (int j = 0; j < matrix[i].length; j++) {
+					v2[i][j] = secretSigns.get(countValues2);
+					writer.write(" " + v2[i][j] + " ");
+					countValues2++;
+				}
+				writer.newLine();
 			}
-			writer.newLine();
-		}
 
-		writer.newLine();
-		writer.write("Tranpose");
-		writer.newLine();
-		double[][] t = transpose(v2);
-		for (int i = 0; i < t.length; i++) {
-			for (int j = 0; j < t[0].length; j++) {
-				writer.write(" " + t[i][j] + " ");
+			writer.newLine();
+			writer.write("Tranpose");
+			writer.newLine();
+			double[][] t = transpose(v2);
+			for (int i = 0; i < t.length; i++) {
+				for (int j = 0; j < t[0].length; j++) {
+					writer.write(" " + t[i][j] + " ");
+				}
+				writer.newLine();
 			}
-			writer.newLine();
-		}
 
+		} else {
+
+		}
 		writer.newLine();
-		writer.write("Multiplied 1/det : " + changeValueToProperForm(det) + " to Tranposed Matrix: ");
+		if (Double.isInfinite(det) == true) {
+			writer.write("Determinant is: " + det);
+		} else {
+			writer.write("Multiplied 1/det : " + changeValueToProperForm(det) + " to Tranposed Matrix: ");
+		}
 		if (Double.isInfinite(det) == false) {
 			for (int i = 0; i < inverse.length; i++) {
 				for (int j = 0; j <= i; j++) {
@@ -255,6 +263,8 @@ public class MatrixCalculator {
 			writer.write(" Inverse Matrix: ");
 			writer.newLine();
 			writer.write("     INVERSE DOESN'T EXIST");
+			writer.close();
+			return null;
 		}
 
 		writer.close();

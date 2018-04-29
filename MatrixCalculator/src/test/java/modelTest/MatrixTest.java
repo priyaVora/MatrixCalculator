@@ -40,8 +40,6 @@ public class MatrixTest {
 		b_data[1][0] = 1;
 		b_data[2][0] = 1;
 
-	
-
 		b.setCurrentMatrix(b_data);
 		Matrix resultMatrix = new Matrix("A B", 3, 1);
 		resultMatrix = cal.multipyMatrices(a, b);
