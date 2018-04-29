@@ -1,5 +1,6 @@
 package control;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
@@ -188,7 +189,10 @@ public class MatrixCalculator {
 	}
 
 	public double[][] rref(double[][] matrix) throws FileNotFoundException, UnsupportedEncodingException {
-		PrintWriter writer = new PrintWriter("MatrixRowOperationWork.txt", "UTF-8");
+		//System.out.println(System.getProperty("user.home") + "\\Desktop");
+		//File desktop = new File(System.getProperty("user.home") + "/Desktop");
+		boolean folder = new File(System.getProperty("user.home") + "/Desktop" + "\\MatrixShowWork").mkdirs();
+		PrintWriter writer = new PrintWriter(System.getProperty("user.home") + "/Desktop" + "\\MatrixShowWork" + "\\ShowWork.txt");
 		// writer.println("The first line");
 		// writer.println("The second line");
 		// writer.close();
