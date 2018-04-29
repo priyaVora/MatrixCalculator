@@ -15,6 +15,40 @@ import model.Matrix;
 public class MatrixTest {
 
 	@Test
+	public void testMultiplication3by3_3by1() {
+		MatrixCalculator cal = new MatrixCalculator();
+		Matrix a = new Matrix("A", 3, 3);
+		Matrix b = new Matrix("B", 3, 1);
+
+		double[][] a_data = new double[3][3];
+		a_data[0][0] = 3;
+		a_data[0][1] = 3;
+		a_data[0][2] = 3;
+
+		a_data[1][0] = 43;
+		a_data[1][1] = 234;
+		a_data[1][2] = 234;
+
+		a_data[2][0] = 234;
+		a_data[2][1] = 234;
+		a_data[2][2] = 234;
+
+		a.setCurrentMatrix(a_data);
+
+		double[][] b_data = new double[3][1];
+		b_data[0][0] = 2;
+		b_data[1][0] = 1;
+		b_data[2][0] = 1;
+
+		b.setCurrentMatrix(b_data);
+		Matrix resultMatrix = new Matrix("A B", 3, 1);
+		resultMatrix = cal.multipyMatrices(a, b);
+		System.out.println("Print Multiplications: ");
+		resultMatrix.printMatrix();
+
+	}
+
+	@Test
 	public void testShowingWork_addition() {
 		MatrixCalculator cal = new MatrixCalculator();
 		Matrix a = new Matrix("A", 2, 2);
@@ -46,6 +80,11 @@ public class MatrixTest {
 		expected.setCurrentMatrix(expectedData);
 
 		Matrix resultMatrix = cal.addMatrices(a, b);
+		if (cal.areSameMatrices(expected, resultMatrix)) {
+			assertTrue(true);
+		} else {
+			assertTrue(false);
+		}
 	}
 
 	@Test
@@ -54,7 +93,7 @@ public class MatrixTest {
 		Matrix a = new Matrix("A", 2, 2);
 		Matrix b = new Matrix("B", 2, 2);
 
-		Matrix expected = new Matrix("A+B", 2, 2);
+		Matrix expected = new Matrix("A B", 2, 2);
 
 		double[][] a_data = new double[2][2];
 		double[][] expectedData = new double[2][2];
@@ -64,10 +103,10 @@ public class MatrixTest {
 		a_data[1][0] = 23;
 		a_data[1][1] = 23;
 
-		expectedData[0][0] = 23;
-		expectedData[0][1] = 23;
-		expectedData[1][0] = 23;
-		expectedData[1][1] = 23;
+		expectedData[0][0] = Double.NaN;
+		expectedData[0][1] = Float.NaN;
+		expectedData[1][0] = Float.NaN;
+		expectedData[1][1] = Float.NaN;
 
 		a.setCurrentMatrix(a_data);
 
@@ -78,9 +117,21 @@ public class MatrixTest {
 		System.out.println("/////////////");
 		System.out.println("Is result null? - " + result.length);
 		Matrix resultMatrix = new Matrix();
+		resultMatrix.setName("A B");
 		resultMatrix.setCurrentMatrix(result);
 		resultMatrix.printMatrix();
 
+		System.out.println("EXPECTED: ");
+		for (int i = 0; i < expectedData.length; i++) {
+			for (int j = 0; j < expectedData[0].length; j++) {
+				System.out.print(expectedData[i][j] + " ");
+			}
+			System.out.println(" ");
+		}
+		System.out.println("Result: ");
+		resultMatrix.printMatrix();
+
+		assertArrayEquals(expectedData, result);
 	}
 
 	@Test
@@ -118,12 +169,8 @@ public class MatrixTest {
 
 		a.setCurrentMatrix(a_data);
 
-		// expected.setCurrentMatrix(expectedData);
-
-		System.out.println("/////////////");
 		double[][] result = cal.inverse(a_data);
-		System.out.println("/////////////");
-		System.out.println("Is result null? - " + result.length);
+
 		Matrix resultMatrix = new Matrix();
 		resultMatrix.setCurrentMatrix(result);
 		resultMatrix.printMatrix();

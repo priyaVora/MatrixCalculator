@@ -89,7 +89,9 @@ public class MatrixCalculator {
 
 	public double[][] inverse(double[][] matrix) throws FileNotFoundException {
 		double[][] inverse = new double[matrix.length][matrix.length];
-
+		boolean folder = new File(System.getProperty("user.home") + "/Desktop" + "\\MatrixShowWork").mkdirs();
+		PrintWriter writer = new PrintWriter(
+				System.getProperty("user.home") + "/Desktop" + "\\MatrixShowWork" + "\\InverseMatrix.txt");
 		// minors and cofactors
 		for (int i = 0; i < matrix.length; i++)
 			for (int j = 0; j < matrix[i].length; j++) {
@@ -101,16 +103,30 @@ public class MatrixCalculator {
 
 		// adjugate and determinant
 		double det = 1.0 / determinant(matrix);
-		for (int i = 0; i < inverse.length; i++) {
-			for (int j = 0; j <= i; j++) {
-				double temp = inverse[i][j];
-				double Nan = inverse[j][i] * det;
-				System.out.println("Double: " + Nan);
-				inverse[i][j] = inverse[j][i] * det;
-				inverse[j][i] = temp * det;
+		writer.println("Determinant: " + det);
+		System.out.println("\nInfinite: " + Double.isInfinite(det));
+		if (Double.isInfinite(det) == false) {
+			for (int i = 0; i < inverse.length; i++) {
+				for (int j = 0; j <= i; j++) {
+					double temp = inverse[i][j];
+					double Nan = inverse[j][i] * det;
+					System.out.println("Double: " + Nan);
+					inverse[i][j] = inverse[j][i] * det;
+					inverse[j][i] = temp * det;
+				}
 			}
+			for (int i = 0; i < inverse.length; i++) {
+				for (int j = 0; j < inverse[0].length; j++) {
+					writer.print(inverse[i][j] + " ");
+				}
+				writer.println();
+			}
+		} else {
+			writer.println("");
+			writer.println("INVERSE DOESN'T EXIST");
 		}
 
+		writer.close();
 		return inverse;
 	}
 
@@ -120,7 +136,7 @@ public class MatrixCalculator {
 		PrintWriter writer = new PrintWriter(
 				System.getProperty("user.home") + "/Desktop" + "\\MatrixShowWork" + "\\Determinant.txt");
 		if (matrix.length == 0) {
-			System.out.println("Determinant is Xero");
+			System.out.println("Determinant is Zero");
 			return 0;
 		}
 
@@ -171,11 +187,12 @@ public class MatrixCalculator {
 		writer.println();
 		writer.println(determinantfinalShow);
 		writer.println("Determinant Value: " + det);
+		System.out.println("Determinant Value: " + det);
 		if (det == 0) {
 			writer.println();
 			writer.println("DETERMINANT IS ZERO: THIS MEANS THAT THERE IS NO INVERSE.");
 			writer.println(
-					"HOWEVER THERE CAN BE ZERO OR NO SOLUTIONS FOR THIS MATRIX. USE ROW OPERATIONS TO SOLVE THE SYSTEM.");
+					"HOWEVER THERE CAN BE INFINITE OR NO SOLUTIONS FOR THIS MATRIX. USE ROW OPERATIONS TO SOLVE THE SYSTEM.");
 
 		}
 		writer.close();
@@ -555,7 +572,7 @@ public class MatrixCalculator {
 			currentColumn = 0;
 		}
 		for (int i = 0; i < newResult.length; i++) {
-			for (int j = 0; j < newResult.length; j++) {
+			for (int j = 0; j < newResult[i].length; j++) {
 				answerMultiplication[i][j] = "" + newResult[i][j];
 			}
 		}
