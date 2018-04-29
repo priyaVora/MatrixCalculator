@@ -1,7 +1,13 @@
 package control;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.Closeable;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Array;
@@ -30,6 +36,40 @@ public class MatrixCalculator {
 
 	private String[][] showWorkMultiplication;
 	private String[][] answerMultiplication;
+
+	public static void main(String args[]) {
+
+	}
+
+	public void grabsContentFromFile(String file1, String file2, String thankYou) {
+		FileReader fr = null;
+		FileWriter fw = null;
+		try {
+			fr = new FileReader(System.getProperty("user.home") + "/Desktop" + "\\MatrixShowWork" + "\\" + file1);
+			fw = new FileWriter(System.getProperty("user.home") + "/Desktop" + "\\MatrixShowWork" + "\\+" + file2);
+			int c = fr.read();
+			while (c != -1) {
+				fw.write(c);
+				c = fr.read();
+			}
+			fw.write(thankYou);
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			close(fr);
+			close(fw);
+		}
+	}
+
+	public static void close(Closeable stream) {
+		try {
+			if (stream != null) {
+				stream.close();
+			}
+		} catch (IOException e) {
+			// ...
+		}
+	}
 
 	public void printData(String[][] data) {
 		for (int i = 0; i < data.length; i++) {
@@ -87,24 +127,110 @@ public class MatrixCalculator {
 		return transpose;
 	}
 
-	public double[][] inverse(double[][] matrix) throws FileNotFoundException {
+	public double[][] inverse(double[][] matrix) throws IOException {
+
+		ArrayList<double[][]> list = new ArrayList<double[][]>();
+		ArrayList<Double> valueList = new ArrayList<Double>();
+		ArrayList<Double> secretSigns = new ArrayList<Double>();
+
+		int count = 0;
 		double[][] inverse = new double[matrix.length][matrix.length];
 		boolean folder = new File(System.getProperty("user.home") + "/Desktop" + "\\MatrixShowWork").mkdirs();
-		PrintWriter writer = new PrintWriter(
-				System.getProperty("user.home") + "/Desktop" + "\\MatrixShowWork" + "\\InverseMatrix.txt");
+
+		BufferedReader reader = new BufferedReader(new FileReader(
+				new File(System.getProperty("user.home") + "/Desktop" + "\\MatrixShowWork" + "\\+InverseMatrix.txt")));
+		FileWriter fw = new FileWriter(
+				System.getProperty("user.home") + "/Desktop" + "\\MatrixShowWork" + "\\+InverseMatrix.txt", true);
+		BufferedWriter writer = new BufferedWriter(fw);
 		// minors and cofactors
 		for (int i = 0; i < matrix.length; i++)
 			for (int j = 0; j < matrix[i].length; j++) {
 				double firstSide = Math.pow(-1, i + j);
-				double secondSide = determinant(minor(matrix, i, j));
+				double[][] currentMinor = minor(matrix, i, j);
+				list.add(count, currentMinor);
 
-				inverse[i][j] = Math.pow(-1, i + j) * determinant(minor(matrix, i, j));
+				double secondSide = determinant(currentMinor);
+				valueList.add(secondSide);
+
+				double secretValue = Math.pow(-1, i + j) * determinant(minor(matrix, i, j));
+				secretSigns.add(count, secretValue);
+				inverse[i][j] = secretValue;
+				count++;
 			}
 
 		// adjugate and determinant
 		double det = 1.0 / determinant(matrix);
-		writer.append("Determinant: Inverse: " + det);
-		System.out.println("\nInfinite: " + Double.isInfinite(det));
+
+		grabsContentFromFile("Determinant.txt", "InverseMatrix.txt", "Thank you!");
+
+		writer.write(System.getProperty("line.separator"));
+		writer.write("----------------------------------------------------------------------");
+		writer.newLine();
+
+		for (double[][] eachMinor : list) {
+
+			for (int i = 0; i < eachMinor.length; i++) {
+				for (int j = 0; j < eachMinor[0].length; j++) {
+					writer.write(" " + eachMinor[i][j] + " ");
+				}
+
+				writer.newLine();
+
+			}
+
+			writer.write("------");
+			writer.newLine();
+
+			writer.newLine();
+		}
+
+		writer.newLine();
+
+		writer.write("----------------------------------------------------------------------");
+
+		writer.newLine();
+		writer.write("Before Secret Sign is Applied");
+		writer.newLine();
+
+		int countValues = 0;
+		double[][] v = new double[matrix.length][matrix[0].length];
+		for (int i = 0; i < matrix.length; i++) {
+			for (int j = 0; j < matrix[i].length; j++) {
+				v[i][j] = valueList.get(countValues);
+				writer.write(" " + v[i][j] + " ");
+				countValues++;
+			}
+			writer.newLine();
+		}
+
+		writer.newLine();
+		writer.write("After Secret Sign is Applied");
+		writer.newLine();
+
+		int countValues2 = 0;
+		double[][] v2 = new double[matrix.length][matrix[0].length];
+		for (int i = 0; i < matrix.length; i++) {
+			for (int j = 0; j < matrix[i].length; j++) {
+				v2[i][j] = secretSigns.get(countValues2);
+				writer.write(" " + v2[i][j] + " ");
+				countValues2++;
+			}
+			writer.newLine();
+		}
+
+		writer.newLine();
+		writer.write("Tranpose");
+		writer.newLine();
+		double[][] t = transpose(v2);
+		for (int i = 0; i < t.length; i++) {
+			for (int j = 0; j < t[0].length; j++) {
+				writer.write(" " + t[i][j] + " ");
+			}
+			writer.newLine();
+		}
+
+		writer.newLine();
+		writer.write("Multiplied 1/det : " + changeValueToProperForm(det) + " to Tranposed Matrix: ");
 		if (Double.isInfinite(det) == false) {
 			for (int i = 0; i < inverse.length; i++) {
 				for (int j = 0; j <= i; j++) {
@@ -115,17 +241,20 @@ public class MatrixCalculator {
 					inverse[j][i] = temp * det;
 				}
 			}
-			writer.println(" ");
-			writer.println("Inverse Matrix");
+			writer.newLine();
+			writer.write(" Inverse Matrix");
+			writer.newLine();
 			for (int i = 0; i < inverse.length; i++) {
 				for (int j = 0; j < inverse[0].length; j++) {
-					writer.print(" " + inverse[i][j] + " ");
+					writer.write(" " + changeValueToProperForm(inverse[i][j]) + " ");
 				}
-				writer.println();
+				writer.newLine();
 			}
 		} else {
-			writer.println("");
-			writer.println("INVERSE DOESN'T EXIST");
+			writer.newLine();
+			writer.write(" Inverse Matrix: ");
+			writer.newLine();
+			writer.write("     INVERSE DOESN'T EXIST");
 		}
 
 		writer.close();
@@ -134,7 +263,7 @@ public class MatrixCalculator {
 
 	public double determinant(double[][] matrix) throws FileNotFoundException {
 		String fileText = "";
-		fileText += "Determinant 2 X 2 Matrix: ";
+
 		String determinantfinalShow = "";
 		boolean folder = new File(System.getProperty("user.home") + "/Desktop" + "\\MatrixShowWork").mkdirs();
 		PrintWriter writer = new PrintWriter(
@@ -151,6 +280,7 @@ public class MatrixCalculator {
 		}
 
 		if (matrix.length == 2) {
+			fileText += "Determinant 2 X 2 Matrix: ";
 			fileText += System.getProperty("line.separator");
 			fileText += System.getProperty("line.separator");
 			fileText += "(" + matrix[0][0] + ")" + "*(" + matrix[1][1] + ") - (" + matrix[0][1] + ")" + "*" + "("
@@ -168,6 +298,7 @@ public class MatrixCalculator {
 		for (int i = 0; i < matrix[0].length; i++) {
 			double[][] minorCalculated = minor(matrix, 0, i);
 			System.out.println("Matrix Coefficient: " + matrix[0][i]);
+			System.out.println(fileText);
 			writer.println("Matrix Coefficient: " + matrix[0][i]);
 			fileText += System.getProperty("line.separator");
 			for (int j = 0; j < minorCalculated.length; j++) {

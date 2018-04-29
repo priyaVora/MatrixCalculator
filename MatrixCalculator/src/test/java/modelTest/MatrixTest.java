@@ -40,6 +40,8 @@ public class MatrixTest {
 		b_data[1][0] = 1;
 		b_data[2][0] = 1;
 
+	
+
 		b.setCurrentMatrix(b_data);
 		Matrix resultMatrix = new Matrix("A B", 3, 1);
 		resultMatrix = cal.multipyMatrices(a, b);
@@ -88,7 +90,7 @@ public class MatrixTest {
 	}
 
 	@Test
-	public void testShowingWork_Inverse() throws FileNotFoundException {
+	public void testShowingWork_Inverse() throws IOException {
 		MatrixCalculator cal = new MatrixCalculator();
 		Matrix a = new Matrix("A", 2, 2);
 		Matrix b = new Matrix("B", 2, 2);
@@ -135,7 +137,7 @@ public class MatrixTest {
 	}
 
 	@Test
-	public void inverse3by3_Second() throws FileNotFoundException {
+	public void inverse3by3_Second() throws IOException {
 		MatrixCalculator cal = new MatrixCalculator();
 		Matrix a = new Matrix("A", 3, 3);
 		Matrix b = new Matrix("B", 3, 3);
@@ -177,7 +179,7 @@ public class MatrixTest {
 	}
 
 	@Test
-	public void testShowingWork_Inverse3by3() throws FileNotFoundException {
+	public void testShowingWork_Inverse3by3() throws IOException {
 		MatrixCalculator cal = new MatrixCalculator();
 		Matrix a = new Matrix("A", 3, 3);
 		Matrix b = new Matrix("B", 3, 3);
