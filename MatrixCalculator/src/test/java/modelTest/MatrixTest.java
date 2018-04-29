@@ -2,6 +2,8 @@ package modelTest;
 
 import static org.junit.Assert.*;
 
+import java.io.FileNotFoundException;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 
 import org.junit.Test;
@@ -189,9 +191,9 @@ public class MatrixTest {
 	}
 
 	@Test
-	public void testRREF() {
+	public void testRREF() throws FileNotFoundException, UnsupportedEncodingException {
 		MatrixCalculator cal = new MatrixCalculator();
-
+		
 		Matrix a = new Matrix("A", 3, 4);
 
 		Matrix expected = new Matrix("A", 3, 4);

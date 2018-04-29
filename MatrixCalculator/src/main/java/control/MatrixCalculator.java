@@ -1,5 +1,8 @@
 package control;
 
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Array;
 import java.security.KeyStore.SecretKeyEntry;
 import java.util.ArrayList;
@@ -169,21 +172,35 @@ public class MatrixCalculator {
 		}
 	}
 
-	public double[][] rref(double[][] matrix) {
-		String[][] pivotMultiplicationWork = new String[500][500];
-		String[][] subtractionWork = new String[500][500];
+	public void printArray(String dataArray) {
+
+	}
+
+	public void printArrayProperForm(double[][] dataArray, PrintWriter writer) {
+		for (int i = 0; i < dataArray.length; i++) {
+			for (int j = 0; j < dataArray[i].length; j++) {
+				System.out.print("   " + changeValueToProperForm(dataArray[i][j]) + " ");
+				writer.print("   " + changeValueToProperForm(dataArray[i][j]) + " ");
+			}
+			System.out.println(" ");
+			writer.println("");
+		}
+	}
+
+	public double[][] rref(double[][] matrix) throws FileNotFoundException, UnsupportedEncodingException {
+		PrintWriter writer = new PrintWriter("MatrixRowOperationWork.txt", "UTF-8");
+		// writer.println("The first line");
+		// writer.println("The second line");
+		// writer.close();
+
 		double[][] rrefArray = new double[matrix.length][];
 		for (int i = 0; i < matrix.length; i++) {
 			rrefArray[i] = Arrays.copyOf(matrix[i], matrix[i].length);
 		}
 
 		System.out.println("Original Matrix: ");
-		for (int i = 0; i < rrefArray.length; i++) {
-			for (int j = 0; j < rrefArray[i].length; j++) {
-				System.out.print(changeValueToProperForm(rrefArray[i][j]) + " ");
-			}
-			System.out.println(" ");
-		}
+		writer.println("Original Matrix: \n");
+		printArrayProperForm(rrefArray, writer);
 
 		int currentRow = 0;
 		for (int currentColumn = 0; currentColumn < rrefArray[0].length
@@ -197,87 +214,162 @@ public class MatrixCalculator {
 
 			double[] temp = rrefArray[j];
 			System.out.print("\nRow Focus: ");
+			writer.println();
+			writer.print("\n\nRow Focus: ");
 			for (int i = 0; i < temp.length; i++) {
 				System.out.print(changeValueToProperForm(temp[i]) + " ");
+				writer.print(changeValueToProperForm(temp[i]) + " ");
 			}
 			System.out.println(" ");
+			writer.println(" ");
 			if ((j + 1) != (currentRow + 1)) {
 				System.out.println("Row Swap: " + (j + 1) + " with " + (currentRow + 1));
+				writer.println("Row Swap: " + (j + 1) + " with " + (currentRow + 1));
 			}
 			rrefArray[j] = rrefArray[currentRow];
 			rrefArray[currentRow] = temp;
 
 			double s = 1.0 / rrefArray[currentRow][currentColumn];
 			System.out.println("Multiply: " + changeValueToProperForm(s));
+			writer.println("Multiply: " + changeValueToProperForm(s));
 
 			for (j = 0; j < rrefArray[0].length; j++) {
 				rrefArray[currentRow][j] *= s;
 			}
 
 			System.out.println("\nMatrix Update: ");
-			for (int i = 0; i < rrefArray.length; i++) {
-				for (int k = 0; k < rrefArray[0].length; k++) {
-					System.out.print(changeValueToProperForm(rrefArray[i][k]) + " ");
-				}
-				System.out.println(" ");
-			}
+			writer.println("");
+			writer.println("\nMatrix Update: ");
+			printArrayProperForm(rrefArray, writer);
 			double subtractionValue = 0;
-			int countRow = 0;
-			int countCol = 0;
+
 			for (int i = 0; i < rrefArray.length; i++) {
 				if (i != currentRow) {
 					double t = rrefArray[i][currentColumn];
 
-					System.out.println("\nMulitply " + t + " Pivot: R" + (currentRow + 1));
-					pivotMultiplicationWork = new String[500][500];
+					System.out.println("\nMulitply " + changeValueToProperForm(t) + " Pivot: R" + (currentRow + 1));
+					writer.println("");
+					writer.println("\nMulitply " + changeValueToProperForm(t) + " Pivot: R" + (currentRow + 1));
+					String[] pivotMultiplication = new String[50];
+					double[] pivotMultiplicationAnswer = new double[50];
+					String[] subtraction = new String[50];
+					double[] subtractionAnswer = new double[50];
+
+					int index = 0;
+
 					for (j = 0; j < rrefArray[0].length; j++) {
+
 						subtractionValue = t * rrefArray[currentRow][j];
-						// System.out.println(t + "*(" +
-						// changeValueToProperForm(rrefArray[currentRow][j]) + ")");
+						// System.out.println("(" + changeValueToProperForm(t) + ")" + "*("
+						// + changeValueToProperForm(rrefArray[currentRow][j]) + ")");
 
-						pivotMultiplicationWork[countRow][countCol] = t + "*("
+						pivotMultiplication[index] = "(" + changeValueToProperForm(t) + ")" + "*("
 								+ changeValueToProperForm(rrefArray[currentRow][j]) + ")";
-						System.out.println(pivotMultiplicationWork[countRow][countCol]);
-						System.out.println(pivotMultiplicationWork[countRow][countCol]);
-						System.out.println("Row: " + countRow);
-						System.out.println("Col: " + currentColumn);
-						countRow++;
-						if (countRow == rrefArray.length) {
-							countRow = 0;
-						}
+						pivotMultiplicationAnswer[index] = t * rrefArray[currentRow][j];
+						subtraction[index] = "  " + changeValueToProperForm(rrefArray[i][j]) + "-" + "("
+								+ changeValueToProperForm(subtractionValue) + ")";
 
-						if (countCol == rrefArray[0].length) {
-							countCol = 0;
-						}
-						countCol++;
-						System.out.println(changeValueToProperForm(rrefArray[i][j]) + "-" + subtractionValue);
+						double value = rrefArray[i][j] - subtractionValue;
+						subtractionAnswer[index] = value;
+
 						rrefArray[i][j] -= subtractionValue;
-
+						index++;
 					}
 
+					printShowWorkForRREF(pivotMultiplication, pivotMultiplicationAnswer, subtractionAnswer, subtraction,
+							writer);
+
 					System.out.println("\n\nOperation Type:  R" + (i + 1) + " = R" + (i + 1) + " minus " + "("
+							+ changeValueToProperForm(t) + ")" + ("R" + (+(currentRow + 1))));
+					writer.println("");
+					writer.println("\n\nOperation Type:  R" + (i + 1) + " = R" + (i + 1) + " minus " + "("
 							+ changeValueToProperForm(t) + ")" + ("R" + (+(currentRow + 1))));
 
 					for (int i1 = 0; i1 < rrefArray.length; i1++) {
 						for (int k = 0; k < rrefArray[0].length; k++) {
 							System.out.print("   " + changeValueToProperForm(rrefArray[i1][k]) + " ");
+							writer.print("   " + changeValueToProperForm(rrefArray[i1][k]) + " ");
 						}
 						System.out.println();
+						writer.println("");
 					}
 
 				}
 			}
 			System.out.println("\nEnd: Matrix Update: ");
-			for (int i = 0; i < rrefArray.length; i++) {
-				for (int k = 0; k < rrefArray[0].length; k++) {
-					System.out.print(changeValueToProperForm(rrefArray[i][k]) + " ");
-				}
-				System.out.println();
-			}
+			writer.println("");
+			writer.println("\nEnd: Matrix Update: ");
+			printArrayProperForm(rrefArray, writer);
 			currentRow++;
 		}
 		System.out.println(" ");
+		double[][] resultAsInteger = new double[rrefArray.length][rrefArray[0].length];
+		writer.println("");
+		writer.println("Matrix Row Operation Answer:");
+		for (int i = 0; i < rrefArray.length; i++) {
+			for (int j = 0; j < rrefArray[0].length; j++) {
+				// System.out.print(Math.round(rrefArray[i][j]) + " ");
+				writer.print("  " + Math.round(rrefArray[i][j]) + "  ");
+				resultAsInteger[i][j] = (int) (Math.round(rrefArray[i][j]));
+			}
+			// System.out.println(" ");
+			writer.println("");
+		}
+		writer.close();
 		return rrefArray;
+	}
+
+	public void printShowWorkForRREF(String[] pivotMultiplication, double[] pivotMultiplicationAnswer,
+			double[] subtractionAnswer, String[] subtraction, PrintWriter writer) {
+		System.out.println("\n\nProcess: ");
+		writer.println();
+		writer.println("\nProcess: ");
+		int answerCount = 0;
+		for (int k = 0; k < pivotMultiplication.length; k++) {
+			if (pivotMultiplication[k] == null) {
+				break;
+			}
+			System.out.print(pivotMultiplication[k] + " ");
+			writer.print(pivotMultiplication[k] + " ");
+			answerCount++;
+		}
+
+		System.out.println("\n\nChanged Row: ");
+		writer.println();
+		writer.println("\n\nChanged Row: ");
+		for (int k = 0; k < pivotMultiplicationAnswer.length; k++) {
+			if (k == answerCount) {
+				break;
+			}
+			System.out.print(changeValueToProperForm(pivotMultiplicationAnswer[k]) + " ");
+			writer.print(changeValueToProperForm(pivotMultiplicationAnswer[k]) + " ");
+		}
+
+		System.out.println("\n\nSubtraction Operation: ");
+		writer.println();
+		writer.println("\n\nSubtraction Operation: ");
+
+		int operationCount = 0;
+		for (int k = 0; k < subtraction.length; k++) {
+			if (subtraction[k] == null) {
+				break;
+			}
+			System.out.print(subtraction[k] + " ");
+			writer.print(subtraction[k] + " ");
+			operationCount++;
+		}
+
+		System.out.println("\n\nSubtraction Answer: ");
+		writer.println();
+		writer.println("\n\nSubtraction Answer: ");
+		for (int k = 0; k < subtractionAnswer.length; k++) {
+			if (k == operationCount) {
+				break;
+			}
+			System.out.print(changeValueToProperForm(subtractionAnswer[k]) + " ");
+			writer.print(subtractionAnswer[k] + " ");
+		}
+		writer.println("");
 	}
 
 	public Matrix subtractMatrices(Matrix firstMatrix, Matrix secondMatrix) {
