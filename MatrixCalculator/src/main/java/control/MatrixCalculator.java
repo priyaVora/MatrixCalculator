@@ -103,7 +103,7 @@ public class MatrixCalculator {
 
 		// adjugate and determinant
 		double det = 1.0 / determinant(matrix);
-		writer.println("Determinant: " + det);
+		writer.append("Determinant: Inverse: " + det);
 		System.out.println("\nInfinite: " + Double.isInfinite(det));
 		if (Double.isInfinite(det) == false) {
 			for (int i = 0; i < inverse.length; i++) {
@@ -115,9 +115,11 @@ public class MatrixCalculator {
 					inverse[j][i] = temp * det;
 				}
 			}
+			writer.println(" ");
+			writer.println("Inverse Matrix");
 			for (int i = 0; i < inverse.length; i++) {
 				for (int j = 0; j < inverse[0].length; j++) {
-					writer.print(inverse[i][j] + " ");
+					writer.print(" " + inverse[i][j] + " ");
 				}
 				writer.println();
 			}
@@ -131,10 +133,13 @@ public class MatrixCalculator {
 	}
 
 	public double determinant(double[][] matrix) throws FileNotFoundException {
+		String fileText = "";
+		fileText += "Determinant 2 X 2 Matrix: ";
 		String determinantfinalShow = "";
 		boolean folder = new File(System.getProperty("user.home") + "/Desktop" + "\\MatrixShowWork").mkdirs();
 		PrintWriter writer = new PrintWriter(
 				System.getProperty("user.home") + "/Desktop" + "\\MatrixShowWork" + "\\Determinant.txt");
+
 		if (matrix.length == 0) {
 			System.out.println("Determinant is Zero");
 			return 0;
@@ -146,11 +151,16 @@ public class MatrixCalculator {
 		}
 
 		if (matrix.length == 2) {
-			writer.println("Determinant 2 X 2 Matrix: ");
-			writer.println();
-			writer.println("(" + matrix[0][0] + ")" + "* (" + matrix[1][1] + ") - (" + matrix[0][1] + ")" + "*" + "("
-					+ matrix[1][0] + ")");
-			writer.println(matrix[0][0] * matrix[1][1] - matrix[0][1] * matrix[1][0]);
+			fileText += System.getProperty("line.separator");
+			fileText += System.getProperty("line.separator");
+			fileText += "(" + matrix[0][0] + ")" + "*(" + matrix[1][1] + ") - (" + matrix[0][1] + ")" + "*" + "("
+					+ matrix[1][0] + ")";
+			fileText += System.getProperty("line.separator");
+			fileText += System.getProperty("line.separator");
+			fileText += "  ";
+			fileText += matrix[0][0] * matrix[1][1] - matrix[0][1] * matrix[1][0];
+			fileText += System.getProperty("line.separator");
+			writer.println(fileText);
 			writer.close();
 			return matrix[0][0] * matrix[1][1] - matrix[0][1] * matrix[1][0];
 		}
@@ -159,6 +169,7 @@ public class MatrixCalculator {
 			double[][] minorCalculated = minor(matrix, 0, i);
 			System.out.println("Matrix Coefficient: " + matrix[0][i]);
 			writer.println("Matrix Coefficient: " + matrix[0][i]);
+			fileText += System.getProperty("line.separator");
 			for (int j = 0; j < minorCalculated.length; j++) {
 				for (int j2 = 0; j2 < minorCalculated[0].length; j2++) {
 					System.out.print(" " + minorCalculated[j][j2] + " ");
