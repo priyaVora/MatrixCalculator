@@ -182,7 +182,7 @@ public class MatrixTest {
 	}
 
 	@Test
-	public void testDeterminant() throws FileNotFoundException {
+	public void testDeterminant3by3() throws FileNotFoundException {
 		MatrixCalculator cal = new MatrixCalculator();
 		Matrix a = new Matrix("A", 3, 3);
 		Matrix expectedMatrix = new Matrix("A", 3, 3);
@@ -198,6 +198,25 @@ public class MatrixTest {
 		a_data[2][0] = 1;
 		a_data[2][1] = 1;
 		a_data[2][2] = 6;
+
+		a.setCurrentMatrix(a_data);
+		double determinant = cal.determinant(a.getCurrentMatrix());
+		System.out.println("Determinant: " + determinant);
+
+		// cal.determinant(a.getCurrentMatrix());
+	}
+
+	@Test
+	public void testDeterminant() throws FileNotFoundException {
+		MatrixCalculator cal = new MatrixCalculator();
+		Matrix a = new Matrix("A", 2, 2);
+		Matrix expectedMatrix = new Matrix("A", 2, 2);
+		double[][] a_data = new double[2][2];
+		a_data[0][0] = 2;
+		a_data[0][1] = 7;
+
+		a_data[1][0] = 7;
+		a_data[1][1] = 2;
 
 		a.setCurrentMatrix(a_data);
 		double determinant = cal.determinant(a.getCurrentMatrix());

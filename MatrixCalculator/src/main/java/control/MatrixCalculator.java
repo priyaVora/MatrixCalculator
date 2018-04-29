@@ -130,6 +130,12 @@ public class MatrixCalculator {
 		}
 
 		if (matrix.length == 2) {
+			writer.println("Determinant 2 X 2 Matrix: ");
+			writer.println();
+			writer.println("(" + matrix[0][0] + ")" + "* (" + matrix[1][1] + ") - (" + matrix[0][1] + ")" + "*" + "("
+					+ matrix[1][0] + ")");
+			writer.println(matrix[0][0] * matrix[1][1] - matrix[0][1] * matrix[1][0]);
+			writer.close();
 			return matrix[0][0] * matrix[1][1] - matrix[0][1] * matrix[1][0];
 		}
 		double det = 0;
