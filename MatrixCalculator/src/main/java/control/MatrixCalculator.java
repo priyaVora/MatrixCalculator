@@ -620,7 +620,7 @@ public class MatrixCalculator {
 			subMatrix.setCurrentMatrix(newData);
 			return subMatrix;
 		} else {
-			System.out.println("Dimensions are not same...");
+			System.out.println("Dimensions are not same in subtract...");
 		}
 		return null;
 	}
@@ -771,6 +771,8 @@ public class MatrixCalculator {
 			// System.out.println("Matched!");
 		} else {
 			System.out.println("Did not matched");
+			System.out.println("First Col Count: " + firstMatrixColumnCount);
+			System.out.println("Second Row CountL " + secondMatrixRowCount);
 		}
 
 		return resultMatrix;
